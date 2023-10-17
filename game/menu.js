@@ -1,6 +1,6 @@
 //TODO: implement start menu and random generation for battleships
 //TODO: check if save data is loaded, give player option to continue if so
-import load_game from './load-game.js'
+import load_game from './gameplay.js'
 
 
 export default function menu(save) {

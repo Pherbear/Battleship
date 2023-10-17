@@ -10,7 +10,7 @@
 //import enemy from './game/enemy'
 //import battle-logic from './game/battle-logic'
 import menu from './game/menu.js'
-import load_game from './game/load-game.js'
+import gameplay from './game/gameplay.js'
 
 function continue_game(){
     load_game(save_state)
@@ -43,10 +43,10 @@ function game() {
 
     //this calls start() imported from ./game/menu.js, 
     //which loads the main menu
-    positions = menu(save_state)
+    menu(save_state)
 
     //uncomment this to work on gameplay and skip menu
-    //load_game(save_state)
+    gameplay(save_state)
 
     console.log(positions)
 
