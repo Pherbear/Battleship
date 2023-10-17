@@ -9,24 +9,47 @@
 //import player from './game/player'
 //import enemy from './game/enemy'
 //import battle-logic from './game/battle-logic'
-import start from './game/start.js'
+import menu from './game/menu.js'
+import load_game from './game/load-game.js'
+
+function continue_game(){
+    load_game(save_state)
+}
+
+function start(){
+    load_game()
+}
+
+function settings(){
+    console.log("settings")
+}
+
+let positions
 
 function game() {
     //will check if there is a save state and load it
     //TODO: import save_data from save-state
+    
+    //boolean for save_data loaded
     let save_data = true
+    let save_state = ''
     if (save_data) {
         //load save_data
         //TODO: implement save_data into current game
+        save_state = 'save data 555'
     }
     //game starts and ends here
     let game = document.getElementById('game')
-    //TODO: implement start menu
-    start(save_data)
-    //TODO: load game here
+
+    //this calls start() imported from ./game/menu.js, 
+    //which loads the main menu
+    positions = menu(save_state)
+    load_game(save_state)
+    console.log(positions)
+
     //TODO: save current game
     //TODO: implement game over screen
 }
 
-let game_status = true
+
 game()
