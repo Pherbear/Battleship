@@ -44,7 +44,10 @@ function game() {
     //this calls start() imported from ./game/menu.js, 
     //which loads the main menu
     positions = menu(save_state)
-    load_game(save_state)
+
+    //uncomment this to work on gameplay and skip menu
+    //load_game(save_state)
+
     console.log(positions)
 
     //TODO: save current game
