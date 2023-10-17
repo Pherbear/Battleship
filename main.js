@@ -12,20 +12,6 @@
 import menu from './game/menu.js'
 import gameplay from './game/gameplay.js'
 
-function continue_game(){
-    load_game(save_state)
-}
-
-function start(){
-    load_game()
-}
-
-function settings(){
-    console.log("settings")
-}
-
-let positions
-
 function game() {
     //will check if there is a save state and load it
     //TODO: import save_data from save-state
@@ -47,8 +33,6 @@ function game() {
 
     //uncomment this to work on gameplay and skip menu
     gameplay(save_state)
-
-    console.log(positions)
 
     //TODO: save current game
     //TODO: implement game over screen
