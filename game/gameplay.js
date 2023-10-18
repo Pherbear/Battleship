@@ -6,7 +6,7 @@ let enemyGrid = []
 for(let i = 0; i < gridSize; i++){
     let inner = []
     for(let j = 0; j < gridSize; j++){
-        inner.push('')
+        inner.push([''])
     }
     enemyGrid.push(inner)
 }
@@ -14,13 +14,13 @@ for(let i = 0; i < gridSize; i++){
 for(let i = 0; i < gridSize; i++){
     let inner = []
     for(let j = 0; j < gridSize; j++){
-        inner.push('')
+        inner.push([''])
     }
     playerGrid.push(inner)
 }
 
 
-let viewingPlayer = true
+let viewingPlayer = false
 
 export default function gameplay(save_state = null) {
     
@@ -66,56 +66,85 @@ export default function gameplay(save_state = null) {
     let game = document.getElementById('game')
     game.innerHTML = `
     <div id="gameplay" class="gameplay">
-        <div class="player">
-            Player's grid:
-            <div class="grid">
+        <div>
+            <div class="player">
+                Player's grid:
+                <div class="grid">
+                </div>
             </div>
-        </div>
-        <div class="enemy">
-            Enemy's grid:
-            <div class="grid">
+            <div class="enemy">
+                Enemy's grid:
+                <div class="grid">
+                </div>
             </div>
+            <button>Switch View</button>
         </div>
-        <button>Switch View</button>
+        <div id="status" class="status">
+            <div id="hit">Start Attacking!</div>
+        </div>
     </div>
     `
     let player = game.querySelector(".player")
     let enemy = game.querySelector(".enemy")
+
+    //enemyCords and playerCords consist of arrays (ships) of arrays (each ship block) that have 3 items [x-cords, y-cords, hit]
+    // if hit == 0, it has not been hit yet
+    // if hit == 1, it has been hit
+    // all hit needs to be 1 in order for the ship to sink
+
+    let enemyCords = []
+    let playerCords = []
             
     for(const ship of positions.enemyPositions){
+        let index = positions.enemyPositions.indexOf(ship)
         let y = ship.y
         let x = ship.x
+        let shipcords = []
         if (ship.direction == 'down'){
             for (let i = 0; i < ship.size; i++){
-                enemyGrid[x][y+i] = 'ship'
+                enemyGrid[x][y+i] = ['ship', index]
+                shipcords.push([x,y+i,0])
             }
             enemy.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
+            game.querySelector(".status").innerHTML += generateShipHTML(ship.size, 'Enemy')
         }     
         else if (ship.direction == 'right'){
             for (let i = 0; i < ship.size; i++){
-                enemyGrid[x+i][y] = 'ship'
+                enemyGrid[x+i][y] = ['ship', index]
+                shipcords.push([x+i,y,0])
             }
             enemy.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
+            game.querySelector(".status").innerHTML += generateShipHTML(ship.size, 'Enemy')
         }
+        enemyCords.push(shipcords)
     }
 
-
     for(const ship of positions.playerPositions){
+        let index = positions.playerPositions.indexOf(ship)
         let y = ship.y
         let x = ship.x
+        let shipcords = []
         if (ship.direction == 'down'){
             for (let i = 0; i < ship.size; i++){
-                playerGrid[x][y+i] = 'ship'
+                playerGrid[x][y+i] = ['ship', index]
+                shipcords.push([x,y+i,0])
             }  
             player.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
+            game.querySelector(".status").innerHTML += generateShipHTML(ship.size, 'Player')
+
         }
         else if (ship.direction == 'right'){
             for (let i = 0; i < ship.size; i++){
-                playerGrid[x+i][y] = 'ship'
+                playerGrid[x+i][y] = ['ship', index]
+                shipcords.push([x+i,y,0])
             } 
             player.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
+            game.querySelector(".status").innerHTML += generateShipHTML(ship.size, 'Player')
         }
+        playerCords.push(shipcords)
     }
+
+    console.log(enemyCords, playerCords)
 
     //load grid into game once generation or file has been loaded
     for (let y = 0; y < playerGrid.length; y++) {
@@ -133,28 +162,51 @@ export default function gameplay(save_state = null) {
     }
     
     //adding eventlistener to players and enemy grid
+    //later i want to take off the option to attack yourself XD
     let elements = document.querySelectorAll(".gridItem")
     for(const element of elements){
-        element.addEventListener("click", eventListener)
+        element.addEventListener("click", gridMissle)
     }
 
     //adding event listener to switch view button
-    enemy.style.display = "none"
-    //player.style.display = "none"
+    //enemy.style.display = "none"
+    player.style.display = "none"
     let button = game.querySelector("button")
     button.addEventListener("click", switchView)
 }
 
 //currently this event listener is for the grid, it will show the cordinates of
-//the selected item in console
-function eventListener(e){
+//the selected item in console and change the color of the clicked grid item
+
+function gridMissle(e){
     let cords = e.target.id.split(" ")
     let target = e.target
     console.log(cords)
+    console.log(target)
 
-    target.style.background = "red"
-    target.style.opacity = "0.5"
+    target.style.cssText = `
+        background: red;
+        opacity: 0.5;
+    `
 
+    let status = document.getElementById("hit")
+    let tile
+
+    if (cords[2] == 'enemy'){
+        tile = enemyGrid[cords[0]][cords[1]]
+    } else if (cords[2] == 'player'){
+        tile = playerGrid[cords[0]][cords[1]]
+    }
+
+    if(tile[0] == 'ship'){
+        status.innerText = `Hit!`
+    } else {
+        status.innerText = `Miss!`
+    }
+
+    if (hit) {
+        //TODO: check if the entire ship has been hit
+    }
 }
 
 function switchView(){
@@ -192,5 +244,28 @@ function generateShip(x, y, direction, size){
     </div>
     `
     
+    return html
+}
+
+function generateShipHTML(size, affiliate){
+    let shipType = ``
+
+    switch(size){
+        case 4:
+            shipType = `Large`
+            break;
+        case 3:
+            shipType = 'Medium'
+            break;
+        case 2:
+            shipType = 'Small'
+            break;
+        default:
+            shipType = 'Unknown'
+            break;
+    }
+    
+    let html = `<div id="Ship1" class="ship_status">${affiliate} ${shipType} Vessel: <a>Active</a></div>`
+
     return html
 }

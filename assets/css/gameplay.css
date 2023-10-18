@@ -4,6 +4,24 @@
     z-index: -2;
     font-size: 20px;
     text-shadow: 1px 1px 2px pink;
+    display: flex;
+}
+
+.status{
+    font-size: 40px;
+    color: whitesmoke;
+    padding: 40px;
+    background: black;
+    margin-bottom: 200px;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.ship_status{
+    font-size: 20px;
+}
+.ship_status a {
+    color: green;
 }
 
 .grid{
