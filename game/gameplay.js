@@ -20,7 +20,7 @@ for(let i = 0; i < gridSize; i++){
 }
 
 
-let viewingPlayer = false
+let viewingPlayer = true
 
 export default function gameplay(save_state = null) {
     
@@ -62,7 +62,26 @@ export default function gameplay(save_state = null) {
         //TODO: generate cordinates of new game
         console.log(`new game`)
     }
-
+    
+    let game = document.getElementById('game')
+    game.innerHTML = `
+    <div id="gameplay" class="gameplay">
+        <div class="player">
+            Player's grid:
+            <div class="grid">
+            </div>
+        </div>
+        <div class="enemy">
+            Enemy's grid:
+            <div class="grid">
+            </div>
+        </div>
+        <button>Switch View</button>
+    </div>
+    `
+    let player = game.querySelector(".player")
+    let enemy = game.querySelector(".enemy")
+            
     for(const ship of positions.enemyPositions){
         let y = ship.y
         let x = ship.x
@@ -70,14 +89,29 @@ export default function gameplay(save_state = null) {
         if (ship.direction == 'down'){
             for (let i = 0; i < ship.size; i++){
                 enemyGrid[x][y+i] = 'ship'
-            }  
+            }
+            player.querySelector(".grid").innerHTML += `
+            <div class = "ship_container"
+                style = "grid-area: ${y+1} / ${x+1} / ${y+1+ship.size} / ${x+1};">
+                <img src="../assets/sprites/ship_down.jpg"
+                    class = "ship_image">
+            </div>
+            `
         }     
         else if (ship.direction == 'right'){
             for (let i = 0; i < ship.size; i++){
                 enemyGrid[x+i][y] = 'ship'
-            } 
+            }
+            player.querySelector(".grid").innerHTML += `
+            <div class = "ship_container"
+                style = "grid-area: ${y+1} / ${x+1} / ${y+1} / ${x+1+ship.size};">
+                <img src="../assets/sprites/ship_right.jpg"
+                    class = "ship_image">
+            </div>
+            `
         }
     }
+
 
     for(const ship of positions.playerPositions){
         let y = ship.y
@@ -96,27 +130,9 @@ export default function gameplay(save_state = null) {
     }
     
 
+
     //TODO: load grid into game once generation or file has been loaded
     
-    let game = document.getElementById('game')
-    game.innerHTML = `
-    <div id="gameplay" class="gameplay">
-        <div class="player">
-            Player's grid:
-            <div class="grid">
-            </div>
-        </div>
-        <div class="enemy">
-            Enemy's grid:
-            <div class="grid">
-            </div>
-        </div>
-        <button>Switch View</button>
-    </div>
-    `
-    
-    let player = game.querySelector(".player")
-    let enemy = game.querySelector(".enemy")
     
     for (let y = 0; y < playerGrid.length; y++) {
         for(let x = 0; x < playerGrid[y].length; x++){
@@ -143,8 +159,8 @@ export default function gameplay(save_state = null) {
     }
 
     //adding event listener to switch view button
-    //enemy.style.display = "none"
-    player.style.display = "none"
+    enemy.style.display = "none"
+    //player.style.display = "none"
     let button = game.querySelector("button")
     button.addEventListener("click", switchView)
 }
