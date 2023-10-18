@@ -1,7 +1,24 @@
 const gridSize = 10
 
-let playerGrid = new Array(gridSize).fill(new Array(gridSize).fill('empty'))
-let enemyGrid = new Array(gridSize).fill(new Array(gridSize).fill('empty'))
+let playerGrid = []
+let enemyGrid = []
+
+for(let i = 0; i < gridSize; i++){
+    let inner = []
+    for(let j = 0; j < gridSize; j++){
+        inner.push('')
+    }
+    enemyGrid.push(inner)
+}
+
+for(let i = 0; i < gridSize; i++){
+    let inner = []
+    for(let j = 0; j < gridSize; j++){
+        inner.push('')
+    }
+    playerGrid.push(inner)
+}
+
 
 let viewingPlayer = false
 
@@ -28,45 +45,54 @@ export default function gameplay(save_state = null) {
         positions = {
             enemyPositions: [
                 {x: 5, y: 5, direction: 'down', size: 4},
-                // {x: 3, y: 5, direction: 'down', size: 3},
-                // {x: 1, y: 5, direction: 'down', size: 2},
-                // {x: 7, y: 5, direction: 'down', size: 2},
-                // {x: 3, y: 9, direction: 'right', size: 2},
+                {x: 3, y: 5, direction: 'down', size: 3},
+                {x: 1, y: 5, direction: 'down', size: 2},
+                {x: 7, y: 5, direction: 'down', size: 2},
+                {x: 3, y: 9, direction: 'right', size: 2},
             ],
-            playerPositions: {
-                bigship: {},
-                mediumship: {},
-                smallship1: {},
-                smallship2: {},
-                smallship3: {}
-            }
+            playerPositions: [
+                {x: 5, y: 5, direction: 'down', size: 4},
+                {x: 3, y: 5, direction: 'down', size: 3},
+                {x: 1, y: 5, direction: 'down', size: 2},
+                {x: 7, y: 5, direction: 'down', size: 2},
+                {x: 3, y: 9, direction: 'right', size: 2},
+            ]
         }
     } else {
         //TODO: generate cordinates of new game
         console.log(`new game`)
     }
 
-    console.log(enemyGrid)
-
     for(const ship of positions.enemyPositions){
-        console.log(ship)
         let y = ship.y
         let x = ship.x
 
+        if (ship.direction == 'down'){
+            for (let i = 0; i < ship.size; i++){
+                enemyGrid[x][y+i] = 'ship'
+            }  
+        }     
+        else if (ship.direction == 'right'){
+            for (let i = 0; i < ship.size; i++){
+                enemyGrid[x+i][y] = 'ship'
+            } 
+        }
+    }
+
+    for(const ship of positions.playerPositions){
+        let y = ship.y
+        let x = ship.x
 
         if (ship.direction == 'down'){
             for (let i = 0; i < ship.size; i++){
-                enemyGrid[x][y+i] = '!!!'
+                playerGrid[x][y+i] = 'ship'
             }  
+        }     
+        else if (ship.direction == 'right'){
+            for (let i = 0; i < ship.size; i++){
+                playerGrid[x+i][y] = 'ship'
+            } 
         }
-
-        console.log(enemyGrid)     
-        // else if (ship.direction == 'right'){
-        //     for (let i = x; i < x + ship.size; i++){
-        //         enemyGrid[i][y] = '!!!'
-        //     }  
-        // }
-
     }
     
 
