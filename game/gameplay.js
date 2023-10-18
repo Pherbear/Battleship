@@ -1,10 +1,9 @@
+const gridSize = 10
 
+let playerGrid = new Array(gridSize).fill(new Array(gridSize).fill('empty'))
+let enemyGrid = new Array(gridSize).fill(new Array(gridSize).fill('empty'))
 
-let playerGrid = new Array(10).fill(new Array(10).fill('content'))
-let enemyGrid = new Array(10).fill(new Array(10).fill('content'))
-
-let viewingPlayer = true
-
+let viewingPlayer = false
 
 export default function gameplay(save_state = null) {
     
@@ -12,8 +11,6 @@ export default function gameplay(save_state = null) {
         enemyPositions: {},
         playerPositions: {}
     }
-    
-    console.log(positions)
     
     //TODO: Create random generation for grid
     //here we will generate the grid, create enemy and player ships
@@ -29,13 +26,13 @@ export default function gameplay(save_state = null) {
         //this is a test for loading, this needs to be replaced
         //with actual save data
         positions = {
-            enemyPositions: {
-                bigship: {},
-                mediumship: {},
-                smallship1: {},
-                smallship2: {},
-                smallship3: {}
-            },
+            enemyPositions: [
+                {x: 5, y: 5, direction: 'down', size: 4},
+                // {x: 3, y: 5, direction: 'down', size: 3},
+                // {x: 1, y: 5, direction: 'down', size: 2},
+                // {x: 7, y: 5, direction: 'down', size: 2},
+                // {x: 3, y: 9, direction: 'right', size: 2},
+            ],
             playerPositions: {
                 bigship: {},
                 mediumship: {},
@@ -44,11 +41,34 @@ export default function gameplay(save_state = null) {
                 smallship3: {}
             }
         }
-        
     } else {
         //TODO: generate cordinates of new game
         console.log(`new game`)
     }
+
+    console.log(enemyGrid)
+
+    for(const ship of positions.enemyPositions){
+        console.log(ship)
+        let y = ship.y
+        let x = ship.x
+
+
+        if (ship.direction == 'down'){
+            for (let i = 0; i < ship.size; i++){
+                enemyGrid[x][y+i] = '!!!'
+            }  
+        }
+
+        console.log(enemyGrid)     
+        // else if (ship.direction == 'right'){
+        //     for (let i = x; i < x + ship.size; i++){
+        //         enemyGrid[i][y] = '!!!'
+        //     }  
+        // }
+
+    }
+    
 
     //TODO: load grid into game once generation or file has been loaded
     
@@ -75,40 +95,35 @@ export default function gameplay(save_state = null) {
     for (let y = 0; y < playerGrid.length; y++) {
         for(let x = 0; x < playerGrid[y].length; x++){
             let item = `
-            <div class="gridItem" id="${x} ${y}">${playerGrid[x][y]}</div>
+            <div class="gridItem" id="${x} ${y} player">${playerGrid[x][y]}</div>
             `
             player.querySelector(".grid").innerHTML += item
         }
     }
     
-    for (let x = 0; x < enemyGrid.length; x++) {
-        for(let y = 0; y < enemyGrid[x].length; y++){
+    for (let y = 0; y < enemyGrid.length; y++) {
+        for(let x = 0; x < enemyGrid[y].length; x++){
             let item = `
-            <div class="gridItem" id="${x} ${y}">${enemyGrid[x][y]}</div>
+            <div class="gridItem" id="${x} ${y} enemy">${enemyGrid[x][y]}</div>
             `
             enemy.querySelector(".grid").innerHTML += item
         }
     }
     
     //adding eventlistener to players and enemy grid
-    let playerElements = player.querySelectorAll(".gridItem")
-    for(const element of playerElements){
-        element.addEventListener("click", eventListener)
-    }
-
-    let enemyElements = enemy.querySelectorAll(".gridItem")
-    for(const element of enemyElements){
+    let elements = document.querySelectorAll(".gridItem")
+    for(const element of elements){
         element.addEventListener("click", eventListener)
     }
 
     //adding event listener to switch view button
-    enemy.style.display = "none"
+    //enemy.style.display = "none"
+    player.style.display = "none"
     let button = game.querySelector("button")
     button.addEventListener("click", switchView)
 }
 
-
-//currently this event listener is for the player, it will show the cordinates of
+//currently this event listener is for the grid, it will show the cordinates of
 //the selected item in console
 function eventListener(e){
     let cords = e.target.id.split(" ")
