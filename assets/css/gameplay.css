@@ -1,4 +1,25 @@
+.gameplay{
+    padding: 50px;
+}
+
 .grid{
     display: grid;
-    
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+    gap: 2px 2px;
+}
+
+.player{ 
+    color:green;
+}
+
+.enemy{
+    color: red;
+}
+
+.gridItem{
+    border: black solid 1px;
+}
+.gridItem:hover{
+    background: black;
 }
