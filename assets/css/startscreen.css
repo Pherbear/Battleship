@@ -17,3 +17,13 @@
     background: blue;
     font-size: 30px;
 }
+
+#options{
+    display: flex;
+    margin-top: 50px;
+}
+
+body{
+   background-image: url("/turn-base/assets/start-screen/ship.jpg"); 
+   background-size: cover;
+}
