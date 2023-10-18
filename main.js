@@ -27,12 +27,12 @@ function game() {
     //game starts and ends here
     let game = document.getElementById('game')
 
-    //this calls start() imported from ./game/menu.js, 
+    //this calls menu() imported from ./game/menu.js, 
     //which loads the main menu
     menu(save_state)
 
     //uncomment this to work on gameplay and skip menu
-    // gameplay(save_state)
+    gameplay(save_state)
 
     //TODO: save current game
     //TODO: implement game over screen

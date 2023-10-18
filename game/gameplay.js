@@ -44,18 +44,18 @@ export default function gameplay(save_state = null) {
         //with actual save data
         positions = {
             enemyPositions: [
-                {x: 5, y: 5, direction: 'down', size: 4},
+                {x: 3, y: 2, direction: 'right', size: 4},
                 {x: 3, y: 5, direction: 'down', size: 3},
                 {x: 1, y: 5, direction: 'down', size: 2},
                 {x: 7, y: 5, direction: 'down', size: 2},
                 {x: 3, y: 9, direction: 'right', size: 2},
             ],
             playerPositions: [
-                {x: 5, y: 5, direction: 'down', size: 4},
-                {x: 3, y: 5, direction: 'down', size: 3},
-                {x: 1, y: 5, direction: 'down', size: 2},
-                {x: 7, y: 5, direction: 'down', size: 2},
-                {x: 3, y: 9, direction: 'right', size: 2},
+                {x: 3, y: 2, direction: 'down', size: 4},
+                {x: 5, y: 3, direction: 'down', size: 3},
+                {x: 1, y: 0, direction: 'right', size: 2},
+                {x: 7, y: 2, direction: 'down', size: 2},
+                {x: 1, y: 9, direction: 'right', size: 2},
             ]
         }
     } else {
@@ -85,30 +85,17 @@ export default function gameplay(save_state = null) {
     for(const ship of positions.enemyPositions){
         let y = ship.y
         let x = ship.x
-
         if (ship.direction == 'down'){
             for (let i = 0; i < ship.size; i++){
                 enemyGrid[x][y+i] = 'ship'
             }
-            player.querySelector(".grid").innerHTML += `
-            <div class = "ship_container"
-                style = "grid-area: ${y+1} / ${x+1} / ${y+1+ship.size} / ${x+1};">
-                <img src="../assets/sprites/ship_down.jpg"
-                    class = "ship_image">
-            </div>
-            `
+            enemy.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
         }     
         else if (ship.direction == 'right'){
             for (let i = 0; i < ship.size; i++){
                 enemyGrid[x+i][y] = 'ship'
             }
-            player.querySelector(".grid").innerHTML += `
-            <div class = "ship_container"
-                style = "grid-area: ${y+1} / ${x+1} / ${y+1} / ${x+1+ship.size};">
-                <img src="../assets/sprites/ship_right.jpg"
-                    class = "ship_image">
-            </div>
-            `
+            enemy.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
         }
     }
 
@@ -116,38 +103,31 @@ export default function gameplay(save_state = null) {
     for(const ship of positions.playerPositions){
         let y = ship.y
         let x = ship.x
-
         if (ship.direction == 'down'){
             for (let i = 0; i < ship.size; i++){
                 playerGrid[x][y+i] = 'ship'
             }  
-        }     
+            player.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
+        }
         else if (ship.direction == 'right'){
             for (let i = 0; i < ship.size; i++){
                 playerGrid[x+i][y] = 'ship'
             } 
+            player.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
         }
     }
-    
 
-
-    //TODO: load grid into game once generation or file has been loaded
-    
-    
+    //load grid into game once generation or file has been loaded
     for (let y = 0; y < playerGrid.length; y++) {
         for(let x = 0; x < playerGrid[y].length; x++){
-            let item = `
-            <div class="gridItem" id="${x} ${y} player">${playerGrid[x][y]}</div>
-            `
+            let item = `<div class="gridItem" id="${x} ${y} player"></div>`
             player.querySelector(".grid").innerHTML += item
         }
     }
     
     for (let y = 0; y < enemyGrid.length; y++) {
         for(let x = 0; x < enemyGrid[y].length; x++){
-            let item = `
-            <div class="gridItem" id="${x} ${y} enemy">${enemyGrid[x][y]}</div>
-            `
+            let item = `<div class="gridItem" id="${x} ${y} enemy"></div>`
             enemy.querySelector(".grid").innerHTML += item
         }
     }
@@ -169,7 +149,12 @@ export default function gameplay(save_state = null) {
 //the selected item in console
 function eventListener(e){
     let cords = e.target.id.split(" ")
+    let target = e.target
     console.log(cords)
+
+    target.style.background = "red"
+    target.style.opacity = "0.5"
+
 }
 
 function switchView(){
@@ -187,4 +172,25 @@ function switchView(){
         viewingPlayer = true
     }
 
+}
+
+function generateShip(x, y, direction, size){
+    let targetx = x + 1
+    let targety = y + 1
+
+    if(direction == 'down'){
+        targety += size
+    } else if (direction == 'right'){
+        targetx += size
+    }
+
+    let html = `
+    <div class = "ship_container"
+        style = "grid-area: ${y+1} / ${x+1} / ${targety} / ${targetx};">
+        <img src="../assets/sprites/ship_${direction}.jpg"
+            class = "ship_image">
+    </div>
+    `
+    
+    return html
 }
