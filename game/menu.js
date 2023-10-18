@@ -7,11 +7,13 @@ export default function menu(save) {
 
     let game = document.getElementById('game')
     game.innerHTML = `
-        <div id="start">
-            <div id="logo" class="logo">
-                <img src="./assets/start-screen/title.jpg">
+        <div class="screen">
+            <div id="start">
+                <div id="logo" class="logo">
+                    <img src="./assets/start-screen/title.jpg">  
+                </div>
+                <div id="options" class="buttons"></div>
             </div>
-            <div id="options" class="buttons"></div>
         </div>
     `
 

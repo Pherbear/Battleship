@@ -9,6 +9,7 @@
     flex-direction: column;
     padding-left: 200px;
     padding-right: 200px;
+    padding-bottom: 200px;
     gap: 50px;
 }
 
@@ -16,4 +17,15 @@
     height: 40px;
     background: blue;
     font-size: 30px;
+    cursor: pointer;
+}
+
+#options{
+    display: flex;
+    margin-top: 50px;
+}
+
+.screen{
+   background-image: url("/assets/start-screen/ship.jpg"); 
+   background-size: cover;
 }
