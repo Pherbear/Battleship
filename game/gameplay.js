@@ -13,11 +13,9 @@ populateArray(gridSize, playerGrid)
 populateArray(gridSize, enemyGrid)
 
 let viewingPlayer = false
-
 let positions = []
 
 export default function gameplay(save_state = null) {
-    
     
     //TODO: Create random generation for grid
     //here we will generate the grid, create enemy and player ships
@@ -32,7 +30,7 @@ export default function gameplay(save_state = null) {
         console.log(`${save_state} has been loaded!`)
 
         //TODO: this is a test for loading, this needs to be replaced
-        //with actual save data
+        //with actual save data, this data is hard coded currently
         positions = [
                 {x: 3, y: 2, direction: 'right', size: 4, affiliate: 'enemy', damage: [0,0,0,0]},
                 {x: 3, y: 5, direction: 'down', size: 3, affiliate: 'enemy', damage: [0,0,0]},
@@ -111,8 +109,8 @@ export default function gameplay(save_state = null) {
                 gridType[x+i][y] = [ship, i]
             }
         }
-        htmlsection.querySelector(".grid").innerHTML += generateShip(x, y, ship.direction, ship.size)
-        game.querySelector(".status").innerHTML += generateShipHTML(ship.size, affiliate, shipIndex)
+        htmlsection.querySelector(".grid").innerHTML += generateShip(ship)
+        game.querySelector(".status").innerHTML += generateShipHTML(ship)
     }
 
 
@@ -134,7 +132,7 @@ export default function gameplay(save_state = null) {
     //adding eventlistener to players and enemy grid
     //later i want to take off the option to attack yourself XD
     //check out the gridMissle() function
-    let elements = document.querySelectorAll(".gridItem")
+    let elements = document.querySelectorAll(".enemy .gridItem")
     for(const element of elements){
         element.addEventListener("click", gridMissle)
     }
@@ -199,6 +197,8 @@ function gridMissle(e){
         target.style.cssText = `background:yellow;opacity:0.5;`
         status.innerText = `Miss!`
     }
+
+    //turn()
 }
 
 function switchView(){
@@ -219,7 +219,11 @@ function switchView(){
 }
 
 //this function only generates the ship image, doesn't affect actual gameplay
-function generateShip(x, y, direction, size){
+function generateShip(ship){
+    let x = ship.x
+    let y = ship.y
+    let direction = ship.direction
+    let size = ship.size
     let targetx = x + 1
     let targety = y + 1
 
@@ -242,7 +246,10 @@ function generateShip(x, y, direction, size){
 
 //this function generates the status of the ships on the right side of the game
 //eg. Enemy Large Vessel: Active
-function generateShipHTML(size, affiliate, index){
+function generateShipHTML(ship){
+    let size = ship.size
+    let affiliate = ship.affiliate
+    let index = positions.indexOf(ship)
     let shipType = ``
 
     switch(size){
@@ -292,4 +299,10 @@ function isShipSunk(ship){
 
     ship_html.innerText = "Inactive"
     ship_html.style.color = "red"
+}
+
+function turn(){
+    setTimeout(function(){
+        switchView()
+    }, 1000)
 }
