@@ -1,10 +1,12 @@
 .gameplay{
     padding: 70px;
-    background-image: url('../background/ocean.jpg');
+    background-image: url('../background/gameplay_background.jpg');
     z-index: -2;
     font-size: 20px;
     text-shadow: 1px 1px 2px pink;
     display: flex;
+    background-size: cover;
+    justify-content: center;
 }
 
 .status{
@@ -15,6 +17,7 @@
     margin-bottom: 200px;
     margin-left: 30px;
     margin-top: 20px;
+    display: inline-block
 }
 
 .ship_status{
@@ -31,6 +34,8 @@
     gap: 2px 2px;
     position: relative;
     cursor: pointer;
+    background-image: url('../background/ocean.jpg');
+
 }
 
 .player{ 

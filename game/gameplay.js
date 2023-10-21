@@ -195,6 +195,7 @@ function gridMissle(e){
         status.innerText = `Hit!`
         ship.damage[shipSectionIndex] = 1
         isShipSunk(ship)
+        gameover(ship)
     } else {
         target.style.cssText = `background:yellow;opacity:0.5;`
         status.innerText = `Miss!`
@@ -292,4 +293,71 @@ function isShipSunk(ship){
 
     ship_html.innerText = "Inactive"
     ship_html.style.color = "red"
+
+}
+
+function groupPlayers(positions, prop)
+{
+    var grouped = {};
+    for (var i=0; i< positions.length; i++)
+    {
+        var p = positions[i][prop];
+        if (!grouped[p]) 
+        { 
+            grouped[p] = []; 
+        }
+        grouped[p].push(positions[i]);
+    }
+  return grouped
+}
+
+function gameover(myShip)
+{
+    let gameover
+
+    let players = groupPlayers(positions, 'affiliate')
+    console.log(players.enemy)
+    console.log(players.player)
+    if(myShip.affiliate == 'enemy')
+    {
+        for(const ship of players.enemy)
+        {
+            for(let i = 0; i < ship.damage.length; i++)
+            {
+                if(ship.damage[i] == 1)
+                {
+                    gameover = true
+                }
+                else
+                {
+                    
+                    gameover = false
+                    return
+                }
+            }
+        }
+    }
+    else if(myShip.affiliate == 'player')
+    {
+        for(const ship of players.player)
+        {
+            for(let i = 0; i < ship.damage.length; i++)
+            {
+                if(ship.damage[i] == 1)
+                {
+                    gameover = true
+                }
+                else
+                {
+                    gameover = false
+                    return
+                }
+            }
+        }
+    }
+
+    if(gameover)
+    {
+        alert("game over")
+    }
 }
