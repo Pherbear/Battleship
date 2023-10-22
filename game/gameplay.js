@@ -234,9 +234,12 @@ function generateShip(ship){
         targetx += size
     }
 
+    let displayNone
+    if(ship.affiliate == 'enemy') displayNone = `display: none;`
+
     let html = `
-    <div class = "ship_container"
-        style = "grid-area: ${y+1} / ${x+1} / ${targety} / ${targetx};">
+    <div class = "ship_container" id="ship${positions.indexOf(ship)}"
+        style = "grid-area: ${y+1} / ${x+1} / ${targety} / ${targetx}; ${displayNone}">
         <img src="../assets/sprites/ship_${direction}.jpg"
             class = "ship_image">
             </div>
@@ -289,6 +292,9 @@ function isShipSunk(ship){
 
     let affiliate = ship.affiliate
     let index = positions.indexOf(ship)
+    let id = `ship${index}`
+
+    let boat_image = document.getElementById(id)
 
     let ship_html = document.getElementById(`${affiliate}_ship_${index}`).querySelector("a")
     ship_html.innerText = "Damaged"
@@ -298,6 +304,7 @@ function isShipSunk(ship){
         if(section == 0) return 
     }
 
+    boat_image.style.display = "block"
     ship_html.innerText = "Inactive"
     ship_html.style.color = "red"
 }
@@ -327,7 +334,6 @@ function groupPlayers(positions, prop)
 function gameover(myShip)
 {
     let gameover
-
     let players = groupPlayers(positions, 'affiliate')
     console.log(players.enemy)
     console.log(players.player)
