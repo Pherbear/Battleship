@@ -14,6 +14,8 @@ populateArray(gridSize, enemyGrid)
 
 let viewingPlayer = false
 let positions = []
+let attackedCords = []
+let currentTurn = 'player'
 
 export default function gameplay(save_state = null) {
     
@@ -27,29 +29,40 @@ export default function gameplay(save_state = null) {
 
     
     if (save_state) {
+
         console.log(`${save_state} has been loaded!`)
 
         //TODO: this is a test for loading, this needs to be replaced
         //with actual save data, this data is hard coded currently
+
         positions = [
-                {x: 3, y: 2, direction: 'right', size: 4, affiliate: 'enemy', damage: [0,0,0,0]},
-                {x: 3, y: 5, direction: 'down', size: 3, affiliate: 'enemy', damage: [0,0,0]},
-                {x: 1, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: [0,0]},
-                {x: 7, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: [0,0]},
-                {x: 3, y: 9, direction: 'right', size: 2, affiliate: 'enemy', damage: [0,0]},
-                {x: 3, y: 2, direction: 'down', size: 4, affiliate: 'player', damage: [0,0,0,0]},
-                {x: 5, y: 3, direction: 'down', size: 3, affiliate: 'player', damage: [0,0,0]},
-                {x: 1, y: 0, direction: 'right', size: 2, affiliate: 'player', damage: [0,0]},
-                {x: 7, y: 2, direction: 'down', size: 2, affiliate: 'player', damage: [0,0]},
-                {x: 1, y: 9, direction: 'right', size: 2, affiliate: 'player', damage: [0,0]},
+                {x: 3, y: 2, direction: 'right', size: 4, affiliate: 'enemy', damage: []},
+                {x: 3, y: 5, direction: 'down', size: 3, affiliate: 'enemy', damage: []},
+                {x: 1, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: []},
+                {x: 7, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: []},
+                {x: 3, y: 9, direction: 'right', size: 2, affiliate: 'enemy', damage: []},
+                {x: 3, y: 2, direction: 'down', size: 4, affiliate: 'player', damage: []},
+                {x: 5, y: 3, direction: 'down', size: 3, affiliate: 'player', damage: []},
+                {x: 1, y: 0, direction: 'right', size: 2, affiliate: 'player', damage: []},
+                {x: 7, y: 2, direction: 'down', size: 2, affiliate: 'player', damage: []},
+                {x: 1, y: 9, direction: 'right', size: 2, affiliate: 'player', damage: []},
             ]
+        attackedCords = ['3 2 enemy', '3 5 enemy', '2 6 enemy', '3 6 enemy', '3 7 enemy']
+        currentTurn = 'player'
 
     } else {
-
         //TODO: generate cordinates of new game
         console.log(`new game`)
+        generatePositions()
+        currentTurn = 'player'
     }
     
+    for (let ship of positions){
+        for (let i = 0; i < ship.size; i++){
+            ship.damage.push(0)
+        }
+    }
+
     //loading html to game
     let game = document.getElementById('game')
     game.innerHTML = `
@@ -65,7 +78,8 @@ export default function gameplay(save_state = null) {
                 <div class="grid">
                 </div>
             </div>
-            <button>Switch View</button>
+            <button id="switch">Switch View</button>
+            <button id="simulate">Simulate Enemy Attack</button>
         </div>
         <div id="status" class="status">
             <div id="hit">Start Attacking!</div>
@@ -82,7 +96,6 @@ export default function gameplay(save_state = null) {
     //both very similar
 
     for(const ship of positions){
-        let shipIndex = positions.indexOf(ship)
         let affiliate = ship.affiliate
         let y = ship.y
         let x = ship.x
@@ -115,26 +128,15 @@ export default function gameplay(save_state = null) {
 
 
     //load grid into game once generation or file has been loaded for both player and enemy
-    for (let y = 0; y < playerGrid.length; y++) {
-        for(let x = 0; x < playerGrid[y].length; x++){
-            let item = `<div class="gridItem" id="${x} ${y} player"></div>`
-            player.querySelector(".grid").innerHTML += item
-        }
-    }
-    
-    for (let y = 0; y < enemyGrid.length; y++) {
-        for(let x = 0; x < enemyGrid[y].length; x++){
-            let item = `<div class="gridItem" id="${x} ${y} enemy"></div>`
-            enemy.querySelector(".grid").innerHTML += item
-        }
-    }
+    loadgrid(enemyGrid, 'enemy')
+    loadgrid(playerGrid, 'player')
     
     //adding eventlistener to players and enemy grid
     //later i want to take off the option to attack yourself XD
     //check out the gridMissle() function
     let elements = document.querySelectorAll(".enemy .gridItem")
     for(const element of elements){
-        element.addEventListener("click", gridMissle)
+        element.addEventListener("click", clickedAttack)
     }
 
     //adding event listener to switch view button
@@ -142,38 +144,52 @@ export default function gameplay(save_state = null) {
     player.style.display = "none"
     let button = game.querySelector("button")
     button.addEventListener("click", switchView)
+
+    game.querySelector("#simulate").addEventListener("click", randomAttack)
+
+    attackFromLoad(attackedCords)
 }
 
+
+function randomAttack(){
+
+    let x = Math.floor(Math.random() * 10)
+    let y = Math.floor(Math.random() * 10)
+
+    while (attackedCords.includes(`${x} ${y} player`)) {
+        x = Math.floor(Math.random() * 10)
+        y = Math.floor(Math.random() * 10)
+    }
+
+    attackedCords.push(`${x} ${y} player`)
+
+    let targetElement = document.getElementById(`${x} ${y} player`)
+    gridMissle(targetElement)
+}
+
+function clickedAttack(e){
+    let target = e.target
+    attackedCords.push(target.id)
+    gridMissle(target)
+}
 //currently this event listener is for the grid, it will show the cordinates of
 //the selected item in console and change the color of the clicked grid item
 
-function gridMissle(e){
-    let target = e.target
-
+function gridMissle(target){
     //cords is going to get the id
     //from the grid itself. each id from the target in the grid comes with 3 pieces of 
     //data:
     //cords[0] = x
     //cords[1] = y
     //cords[2] = (enemy or player)
-
     let cords = target.id.split(" ")
-
-    //css of the clicked item in the grid
 
     
     //status is the big text on the right that says "hit" or "miss"
     let status = document.getElementById("hit")
     
-    //tile is data from the array (playerGrid or enemyGrid)
-    //consists of ['ship', shipIndex, sectionIndex] or ['']
-    //'ship' meaning there is a ship on that grid, '' meaning there is nothing so its a miss
-    //shipIndex telling the game which ship it is, 0 = 1st enemy ship, 1 = 2nd enemy ship, etc
-    //sectionIndex telling the game which part of the ship it is
-    
     let x = cords[0]
     let y = cords[1]
-    
     //enemy or player
     let affiliate = cords[2]
 
@@ -271,9 +287,29 @@ function generateShipHTML(ship){
             break;
     }
     
-    let capitalized = affiliate.charAt(0).toUpperCase() + affiliate.slice(1)
+    let status = 'Active'
+    let fullDamage = true
+    let style = ''
 
-    let html = `<div id="${affiliate}_ship_${index}" class="ship_status">${capitalized} ${shipType} Vessel: <a>Active</a></div>`
+    for(const damage of ship.damage){
+        if (damage == 0) {
+            fullDamage = false
+        }
+        if (damage == 1) {
+            status = 'Damaged'
+            style = 'style="color: yellow;"'
+        }
+    }
+
+    if (fullDamage) {
+        status = 'Inactive'
+        style = 'style="color: red;"'
+    }
+
+    let capitalized = affiliate.charAt(0).toUpperCase() + affiliate.slice(1)
+    let html = `<div id="${affiliate}_ship_${index}" class="ship_status">
+                    ${capitalized} ${shipType} Vessel: <a ${style}>${status}</a>
+                </div>`
     
     return html
 }
@@ -335,8 +371,6 @@ function gameover(myShip)
 {
     let gameover
     let players = groupPlayers(positions, 'affiliate')
-    console.log(players.enemy)
-    console.log(players.player)
     if(myShip.affiliate == 'enemy')
     {
         for(const ship of players.enemy)
@@ -379,4 +413,80 @@ function gameover(myShip)
     {
         alert("game over")
     }
+}
+
+function loadgrid(grid, affiliate){
+    let element
+
+    if(affiliate == 'enemy'){
+        element = document.querySelector('.enemy')
+    } else if (affiliate == 'player'){
+        element = document.querySelector('.player')
+    }
+
+    for (let y = 0; y < grid.length; y++) {
+        for(let x = 0; x < grid[y].length; x++){
+            let item = `<div class="gridItem" id="${x} ${y} ${affiliate}"></div>`
+            element.querySelector(".grid").innerHTML += item
+        }
+    }
+}
+
+function attackFromLoad(){
+    let element
+    for(const cords of attackedCords){
+        element = document.getElementById(cords)
+        gridMissle(element)
+    }
+}
+
+function generatePositions(){
+    let shipOnSide = 5
+    let shipSizes = [4,3,2,2,2]
+
+    for(let i = 0; i < (shipOnSide * 2); i++){
+        let item = {x:0,y:0,direction:'',size:0,affiliate:'',damage:[]}
+        let cords
+        
+        if (i >= shipOnSide){
+            item.affiliate = 'enemy'
+            item.size = shipSizes[i-5]
+            cords = generateCords('enemy')
+        } else {
+            item.affiliate = 'player'
+            item.size = shipSizes[i]
+            cords = generateCords('player')
+        }   
+        item.x = cords.x
+        item.y = cords.y
+        item.direction = cords.direction
+        positions.push(item)
+    }
+    console.log(positions)
+}
+
+let playerCordsUsed = []
+let enemyCordsUsed = []
+
+function generateCords(affiliate){
+    let cordsUsed
+    let cords = {x:0, y:0, direction:'right'}
+
+    if (affiliate == 'enemy'){
+        cordsUsed = playerCordsUsed
+    } else if (affiliate == 'player'){
+        cordsUsed = enemyCordsUsed
+    }
+
+    let random = Math.floor(Math.random() * 2)
+    if (random){
+        cords.direction = 'right'
+    } else {
+        cords.direction = 'down'
+    }
+
+    cords.x = Math.floor(Math.random() * 10)
+    cords.y = Math.floor(Math.random() * 10)
+
+    return cords
 }
