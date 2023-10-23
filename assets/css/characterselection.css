@@ -1,0 +1,22 @@
+.character_selection{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 200px;
+    gap: 30px;
+}
+
+.character_selection a {
+    font-size: 40px;
+    color: blue;
+}
+
+.characters{
+    display: flex;
+    gap: 30px;
+}
+
+.characters img{
+    width: 200px;
+    height: 200px;
+}

@@ -17,7 +17,10 @@ let positions = []
 let attackedCords = []
 let currentTurn = 'player'
 
-export default function gameplay(save_state = null) {
+let playerModel
+let enemyModel
+
+export default function gameplay(save_state = null, playerCharacter = null){
     
     //TODO: Create random generation for grid
     //here we will generate the grid, create enemy and player ships
@@ -27,6 +30,16 @@ export default function gameplay(save_state = null) {
     // 1 ship 3 grid length
     // 1 ship 4 grid length
 
+    let girl = {
+        idleImage: '../assets/sprites/girl_model.png',
+        flinchImage: '../assets/sprites/girl_flinch.png'
+    }
+
+    let boy = {
+        idleImage: '../assets/sprites/boy_model.png',
+        flinchImage: '../assets/sprites/boy_flinch.png'
+    }
+    
     
     if (save_state) {
 
@@ -48,8 +61,9 @@ export default function gameplay(save_state = null) {
                 {x: 1, y: 9, direction: 'right', size: 2, affiliate: 'player', damage: []},
             ]
         attackedCords = ['3 2 enemy', '3 5 enemy', '2 6 enemy', '3 6 enemy', '3 7 enemy']
+        playerCharacter = 'girl'
         currentTurn = 'player'
-
+        
     } else {
         //TODO: generate cordinates of new game
         console.log(`new game`)
@@ -57,6 +71,14 @@ export default function gameplay(save_state = null) {
         currentTurn = 'player'
     }
     
+    if (playerCharacter == 'boy'){
+        playerModel = boy
+        enemyModel = girl
+    } else if (playerCharacter == 'girl'){
+        playerModel = girl
+        enemyModel = boy
+    }
+
     for (let ship of positions){
         for (let i = 0; i < ship.size; i++){
             ship.damage.push(0)
@@ -91,14 +113,14 @@ export default function gameplay(save_state = null) {
                         Player Turn
                         <img src="../assets/sprites/green_arrow.png" class="arrow">
                     </div>
-                    <img src="../assets/sprites/player_model.png" class="player_image">
+                    <img src="${playerModel.idleImage}" class="player_image">
                 </div>
                 <div id="enemy_model" class="character">
                     <div class="enemy_turn">
                         Enemy Turn
                         <img src="../assets/sprites/red_arrow.png" class="arrow">
                     </div>
-                    <img src="../assets/sprites/enemy_model.png" class="enemy_image">
+                    <img src="${enemyModel.idleImage}" class="enemy_image">
                 </div>
             </div>
         </div>
@@ -546,15 +568,25 @@ function generateCords(affiliate, size){
 
 function flinch(affiliate){
     let element= document.querySelector(`.${affiliate}_image`)
+    let flinchImage
+    let idleImage
 
-    element.src = `../assets/sprites/${affiliate}_flinch.png`
+    if(affiliate == 'enemy'){
+        idleImage = enemyModel.idleImage
+        flinchImage = enemyModel.flinchImage
+    } else if (affiliate == 'player'){
+        idleImage = playerModel.idleImage
+        flinchImage = playerModel.flinchImage
+    }
+
+    element.src = `${flinchImage}`
     element.classList.add("damage")
 
     console.log(element)
 
     setTimeout(function(){
         element.classList.remove("damage")
-        element.src = `../assets/sprites/${affiliate}_model.png`
+        element.src = `${idleImage}`
     }, 1000)
 
 }

@@ -1,6 +1,8 @@
 //TODO: implement start menu and random generation for battleships
 //TODO: check if save data is loaded, give player option to continue if so
+import character_selection from './character_selection.js'
 import gameplay from './gameplay.js'
+
 
 
 export default function menu(save) {
@@ -40,7 +42,8 @@ export default function menu(save) {
             let option = e.target.innerText
             switch(option){
                 case 'start':
-                    gameplay()
+                    character_selection()
+                    //gameplay()
                     break;
                 case 'settings':
                     console.log('settings')
