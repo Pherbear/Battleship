@@ -32,7 +32,7 @@ function game() {
     menu(save_state)
 
     //uncomment this to work on gameplay and skip menu
-    //gameplay(save_state)
+    gameplay(save_state)
 
     //TODO: save current game
     //TODO: implement game over screen

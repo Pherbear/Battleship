@@ -81,8 +81,26 @@ export default function gameplay(save_state = null) {
             <button id="switch">Switch View</button>
             <button id="simulate">Simulate Enemy Attack</button>
         </div>
-        <div id="status" class="status">
-            <div id="hit">Start Attacking!</div>
+        <div>
+            <div id="status" class="status">
+                <div id="hit">Start Attacking!</div>
+            </div>
+            <div id="characters">
+                <div id="player_model" class="character">
+                    <div class="player_turn">
+                        Player Turn
+                        <img src="../assets/sprites/green_arrow.png" class="arrow">
+                    </div>
+                    <img src="../assets/sprites/player_model.png" class="player_image">
+                </div>
+                <div id="enemy_model" class="character">
+                    <div class="enemy_turn">
+                        Enemy Turn
+                        <img src="../assets/sprites/red_arrow.png" class="arrow">
+                    </div>
+                    <img src="../assets/sprites/enemy_model.png" class="enemy_image">
+                </div>
+            </div>
         </div>
     </div>
     `
@@ -208,6 +226,7 @@ function gridMissle(target){
         target.style.cssText = `background:red;opacity:0.5;`
         status.innerText = `Hit!`
         ship.damage[shipSectionIndex] = 1
+        flinch(affiliate)
         isShipSunk(ship)
         gameover(ship)
     } else {
@@ -451,11 +470,13 @@ function generatePositions(){
         if (i >= shipOnSide){
             item.affiliate = 'enemy'
             item.size = shipSizes[i-5]
-            cords = generateCords('enemy')
+            cords = generateCords('enemy', item.size)
+            console.log('enemy')
         } else {
             item.affiliate = 'player'
             item.size = shipSizes[i]
-            cords = generateCords('player')
+            cords = generateCords('player', item.size)
+            console.log('player')
         }   
         item.x = cords.x
         item.y = cords.y
@@ -468,7 +489,7 @@ function generatePositions(){
 let playerCordsUsed = []
 let enemyCordsUsed = []
 
-function generateCords(affiliate){
+function generateCords(affiliate, size){
     let cordsUsed
     let cords = {x:0, y:0, direction:'right'}
 
@@ -477,16 +498,63 @@ function generateCords(affiliate){
     } else if (affiliate == 'player'){
         cordsUsed = enemyCordsUsed
     }
+    let direction
+    let random
+    let x
+    let y
+    let regen = true
 
-    let random = Math.floor(Math.random() * 2)
-    if (random){
-        cords.direction = 'right'
-    } else {
-        cords.direction = 'down'
+    let testCords = []
+
+    while(regen){
+
+        testCords = []
+        regen = false
+
+        random = Math.floor(Math.random() * 2)
+        x = Math.floor(Math.random() * 10)
+        y = Math.floor(Math.random() * 10)
+
+        if (random){
+            direction = 'right'
+            for (let i = 0; i < size; i++){
+                testCords.push(`${x+i}${y}`)
+                if ((x+i) > 9) regen = true
+            }
+        } else {
+            direction = 'down'
+            for (let i = 0; i < size; i++){
+                testCords.push(`${x}${y+i}`)
+                if ((y+i) > 9) regen = true
+            }
+        }
+        for(const cord of testCords){
+            if(cordsUsed.includes(cord)){
+                regen = true
+            }
+        }
     }
 
-    cords.x = Math.floor(Math.random() * 10)
-    cords.y = Math.floor(Math.random() * 10)
+    cordsUsed.push.apply(cordsUsed, testCords)
 
+    console.log(cordsUsed)
+    cords.x = x
+    cords.y = y
+    cords.direction = direction
     return cords
+}
+
+function flinch(affiliate){
+    let element= document.querySelector(`.${affiliate}_image`)
+
+    element.src = `../assets/sprites/${affiliate}_flinch.png`
+    element.classList.add("damage")
+
+    console.log(element)
+
+    setTimeout(function(){
+        element.classList.remove("damage")
+        element.src = `../assets/sprites/${affiliate}_model.png`
+    }, 1000)
+
 }

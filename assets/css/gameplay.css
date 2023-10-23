@@ -14,7 +14,6 @@
     color: whitesmoke;
     padding: 40px;
     background: black;
-    margin-bottom: 200px;
     margin-left: 30px;
     margin-top: 20px;
     display: inline-block
@@ -69,3 +68,62 @@
     bottom: 0;
     z-index: 0;
 }
+
+#player_model{
+
+}
+
+#enemy_model{
+    
+}
+
+.character{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 180px;
+    height: 300px;
+}
+
+.character .arrow{
+    height: 60px;
+    width: 50px;
+}
+
+.enemy_turn{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.player_turn{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#characters{
+    display: flex;
+    flex-direction: row;
+    padding-top: 15px;
+    padding-left: 10px;
+    gap: 15px;
+}
+
+.damage {
+    animation: damage_animation 1s;
+}
+
+@keyframes damage_animation {
+    25%{
+        rotate: 10deg;
+        filter: invert(var(--value, 100%)); --value: 100%;
+    }
+    50%{
+        filter: invert(var(--value, 100%)); --value: 0%;
+    }
+    75%{
+        filter: invert(var(--value, 100%)); --value: 100%;
+    }
+}
+
