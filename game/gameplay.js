@@ -20,6 +20,8 @@ let currentTurn = 'player'
 let playerModel
 let enemyModel
 
+let gameEnd = false
+
 export default function gameplay(save_state = null, playerCharacter = null){
     
     //TODO: Create random generation for grid
@@ -59,7 +61,8 @@ export default function gameplay(save_state = null, playerCharacter = null){
                 {x: 7, y: 2, direction: 'down', size: 2, affiliate: 'player', damage: []},
                 {x: 1, y: 9, direction: 'right', size: 2, affiliate: 'player', damage: []},
             ]
-        attackedCords = ['3 2 enemy', '3 5 enemy', '2 6 enemy', '3 6 enemy', '3 7 enemy']
+        attackedCords = ['3 2 enemy', '3 5 enemy', '2 6 enemy', '3 6 enemy', '3 7 enemy',
+                         '1 0 player', '2 0 player']
         playerCharacter = 'girl'
         currentTurn = 'player'
 
@@ -228,6 +231,7 @@ function clickedAttack(e){
 //the selected item in console and change the color of the clicked grid item
 
 function gridMissle(target, fromLoad = false){
+    if (gameEnd) return
     //cords is going to get the id
     //from the grid itself. each id from the target in the grid comes with 3 pieces of 
     //data:
@@ -302,20 +306,38 @@ function generateShip(ship){
     let size = ship.size
     let targetx = x + 1
     let targety = y + 1
+    let ship_type
+    
+    switch(size){
+        case 4:
+            ship_type = 'large'
+            break;
+        case 3:
+            ship_type = 'medium'
+            break;
+        case 2:
+            ship_type = 'small'
+            break;
+        default:
+            ship_type = 'large'
+            break;
+    }
 
     if(direction == 'down'){
         targety += size
     } else if (direction == 'right'){
         targetx += size
     }
-
+    
+    let ship_image = `../assets/sprites/${ship_type}_ship_${direction}.jpg`
+    
     let displayNone
     if(ship.affiliate == 'enemy') displayNone = `display: none;`
 
     let html = `
     <div class = "ship_container" id="ship${positions.indexOf(ship)}"
         style = "grid-area: ${y+1} / ${x+1} / ${targety} / ${targetx}; ${displayNone}">
-        <img src="../assets/sprites/ship_${direction}.jpg"
+        <img src="${ship_image}"
             class = "ship_image">
             </div>
             `
@@ -419,6 +441,7 @@ function groupPlayers(positions, prop)
   return grouped
 }
 
+
 function gameover(myShip)
 {
     let gameover
@@ -463,6 +486,7 @@ function gameover(myShip)
 
     if(gameover)
     {
+        gameEnd = true
         let game = document.getElementById("game")
         let overScreen = `
                 <div id="popup">
