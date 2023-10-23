@@ -20,6 +20,8 @@ let currentTurn = 'player'
 let playerModel
 let enemyModel
 
+let gameEnd = false
+
 export default function gameplay(save_state = null, playerCharacter = null){
     
     //TODO: Create random generation for grid
@@ -228,6 +230,7 @@ function clickedAttack(e){
 //the selected item in console and change the color of the clicked grid item
 
 function gridMissle(target, fromLoad = false){
+    if (gameEnd) return
     //cords is going to get the id
     //from the grid itself. each id from the target in the grid comes with 3 pieces of 
     //data:
@@ -419,6 +422,7 @@ function groupPlayers(positions, prop)
   return grouped
 }
 
+
 function gameover(myShip)
 {
     let gameover
@@ -463,6 +467,7 @@ function gameover(myShip)
 
     if(gameover)
     {
+        gameEnd = true
         alert("game over")
     }
 }

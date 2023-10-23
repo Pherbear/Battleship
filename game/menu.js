@@ -2,6 +2,7 @@
 //TODO: check if save data is loaded, give player option to continue if so
 import character_selection from './character_selection.js'
 import gameplay from './gameplay.js'
+import settings from './settings.js'
 
 
 
@@ -46,7 +47,7 @@ export default function menu(save) {
                     //gameplay()
                     break;
                 case 'settings':
-                    console.log('settings')
+                    settings(save)
                     break;
                 case 'continue game':
                     gameplay(save)

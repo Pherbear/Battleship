@@ -12,7 +12,7 @@
 import menu from './game/menu.js'
 import gameplay from './game/gameplay.js'
 
-function game() {
+export default function game() {
     //will check if there is a save state and load it
     //TODO: import save_data from save-state
     
