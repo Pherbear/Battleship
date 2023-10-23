@@ -194,9 +194,9 @@ function switchTurns(){
         if(currentTurn == 'enemy'){
             setTimeout(function(){
                 randomAttack()
-            }, 1000)
+            }, 500)
         }
-    }, 2000)    
+    }, 1000)    
 
 }
 
