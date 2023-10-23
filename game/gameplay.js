@@ -268,7 +268,7 @@ function gridMissle(target, fromLoad = false){
         status.innerText = `Miss!`
     }
 
-    if (!fromLoad) switchTurns()
+    // if (!fromLoad) switchTurns()
 }
 
 function switchView(affiliate){
@@ -463,7 +463,51 @@ function gameover(myShip)
 
     if(gameover)
     {
-        alert("game over")
+        let game = document.getElementById("game")
+        let overScreen = `
+                <div id="popup">
+                    <h1>Game Over</h1>
+                    <div id="options" class="buttons"></div>
+                </div>
+                `
+                // `
+        //     <div id="popup">
+        //         <h1>Game Over</h1>
+        //         <button onClick="character_selection()">RETRY</button>
+        //         <button onClick="menu()">Exit</button>
+        //     </div>`
+        game.innerHTML += overScreen
+
+        let game_options = ['RETRY', 'EXIT']
+    if (save) {
+        //adds continue option to game_options if there is a save file
+        game_options.unshift('continue game')
+    }
+
+        let options = document.getElementById('options')
+    for(let option of game_options) {
+        //adding all the buttons to start menu
+        options.innerHTML += `<button>${option}</button>`
+    }
+
+    let buttons = options.querySelectorAll('button')
+    for(let button of buttons) {
+        button.addEventListener("click", function(e) {
+            let option = e.target.innerText
+            switch(option){
+                case 'RETRY':
+                    character_selection()
+                    //gameplay()
+                    break;
+                case 'EXIT':
+                    menu()
+                    break;
+                default:
+                    break;
+            }
+        })
+    }
+        // alert("game over")
     }
 }
 
