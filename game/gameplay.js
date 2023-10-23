@@ -47,7 +47,6 @@ export default function gameplay(save_state = null, playerCharacter = null){
 
         //TODO: this is a test for loading, this needs to be replaced
         //with actual save data, this data is hard coded currently
-
         positions = [
                 {x: 3, y: 2, direction: 'right', size: 4, affiliate: 'enemy', damage: []},
                 {x: 3, y: 5, direction: 'down', size: 3, affiliate: 'enemy', damage: []},
@@ -63,12 +62,11 @@ export default function gameplay(save_state = null, playerCharacter = null){
         attackedCords = ['3 2 enemy', '3 5 enemy', '2 6 enemy', '3 6 enemy', '3 7 enemy']
         playerCharacter = 'girl'
         currentTurn = 'player'
-        
+
     } else {
         //TODO: generate cordinates of new game
         console.log(`new game`)
         generatePositions()
-        currentTurn = 'player'
     }
     
     if (playerCharacter == 'boy'){
@@ -100,8 +98,6 @@ export default function gameplay(save_state = null, playerCharacter = null){
                 <div class="grid">
                 </div>
             </div>
-            <button id="switch">Switch View</button>
-            <button id="simulate">Simulate Enemy Attack</button>
         </div>
         <div>
             <div id="status" class="status">
@@ -175,23 +171,37 @@ export default function gameplay(save_state = null, playerCharacter = null){
     //later i want to take off the option to attack yourself XD
     //check out the gridMissle() function
     let elements = document.querySelectorAll(".enemy .gridItem")
+
     for(const element of elements){
         element.addEventListener("click", clickedAttack)
     }
 
-    //adding event listener to switch view button
-    //enemy.style.display = "none"
-    player.style.display = "none"
-    let button = game.querySelector("button")
-    button.addEventListener("click", switchView)
-
-    game.querySelector("#simulate").addEventListener("click", randomAttack)
-
     attackFromLoad(attackedCords)
+    switchView(currentTurn)
 }
 
+let delay = false
+
+function switchTurns(){
+    if(currentTurn == 'enemy') currentTurn = 'player'
+    else if (currentTurn == 'player') currentTurn = 'enemy'
+
+    delay = true
+
+    setTimeout(function(){
+        delay = false
+        switchView(currentTurn)
+        if(currentTurn == 'enemy'){
+            setTimeout(function(){
+                randomAttack()
+            }, 1000)
+        }
+    }, 2000)    
+
+}
 
 function randomAttack(){
+    if (delay) return
 
     let x = Math.floor(Math.random() * 10)
     let y = Math.floor(Math.random() * 10)
@@ -208,6 +218,8 @@ function randomAttack(){
 }
 
 function clickedAttack(e){
+    if (delay) return
+
     let target = e.target
     attackedCords.push(target.id)
     gridMissle(target)
@@ -215,7 +227,7 @@ function clickedAttack(e){
 //currently this event listener is for the grid, it will show the cordinates of
 //the selected item in console and change the color of the clicked grid item
 
-function gridMissle(target){
+function gridMissle(target, fromLoad = false){
     //cords is going to get the id
     //from the grid itself. each id from the target in the grid comes with 3 pieces of 
     //data:
@@ -256,22 +268,28 @@ function gridMissle(target){
         status.innerText = `Miss!`
     }
 
-    //turn()
+    if (!fromLoad) switchTurns()
 }
 
-function switchView(){
+function switchView(affiliate){
 
     let player = game.querySelector(".player")
-    let enemy = game.querySelector(".enemy")
+    let playerArrow = game.querySelector(".player_turn")
 
-    if (viewingPlayer){
+    let enemy = game.querySelector(".enemy")
+    let enemyArrow = game.querySelector(".enemy_turn")
+
+
+    if (affiliate == 'player'){
         player.style.display = "none"
+        playerArrow.style.display = "flex"
         enemy.style.display = "block"
-        viewingPlayer = false
-    } else {
+        enemyArrow.style.display = "none"
+    } else if (affiliate == 'enemy'){
         enemy.style.display = "none"
+        enemyArrow.style.display = "flex"
         player.style.display = "block"
-        viewingPlayer = true
+        playerArrow.style.display = "none"
     }
 
 }
@@ -386,13 +404,6 @@ function isShipSunk(ship){
     ship_html.style.color = "red"
 }
 
-function turn(){
-    setTimeout(function(){
-        switchView()
-    }, 1000)
-
-}
-
 function groupPlayers(positions, prop)
 {
     var grouped = {};
@@ -477,7 +488,7 @@ function attackFromLoad(){
     let element
     for(const cords of attackedCords){
         element = document.getElementById(cords)
-        gridMissle(element)
+        gridMissle(element, true)
     }
 }
 
@@ -567,6 +578,7 @@ function generateCords(affiliate, size){
 }
 
 function flinch(affiliate){
+
     let element= document.querySelector(`.${affiliate}_image`)
     let flinchImage
     let idleImage
@@ -581,8 +593,6 @@ function flinch(affiliate){
 
     element.src = `${flinchImage}`
     element.classList.add("damage")
-
-    console.log(element)
 
     setTimeout(function(){
         element.classList.remove("damage")

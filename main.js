@@ -24,8 +24,6 @@ function game() {
         //TODO: implement save_data into current game
         save_state = 'save data 555'
     }
-    //game starts and ends here
-    let game = document.getElementById('game')
 
     //this calls menu() imported from ./game/menu.js, 
     //which loads the main menu
@@ -35,7 +33,6 @@ function game() {
     //gameplay(save_state)
 
     //TODO: save current game
-    //TODO: implement game over screen
 }
 
 
