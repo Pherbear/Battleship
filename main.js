@@ -11,26 +11,23 @@
 //import battle-logic from './game/battle-logic'
 import menu from './game/menu.js'
 import gameplay from './game/gameplay.js'
+import {clearGameData, loadData} from './save-state/save.js'
 
 export default function game() {
     //will check if there is a save state and load it
     //TODO: import save_data from save-state
     
     //boolean for save_data loaded
-    let save_data = true
-    let save_state = ''
-    if (save_data) {
-        //load save_data
-        //TODO: implement save_data into current game
-        save_state = 'save data 555'
-    }
+    //clearGameData()
+    let save_data = loadData()
+    console.log(save_data)
 
     //this calls menu() imported from ./game/menu.js, 
     //which loads the main menu
-    menu(save_state)
+    menu(save_data)
 
     //uncomment this to work on gameplay and skip menu
-    //gameplay(save_state)
+    //gameplay(save_data)
 
     //TODO: save current game
 }

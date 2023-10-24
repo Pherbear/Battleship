@@ -6,7 +6,7 @@ import settings from './settings.js'
 
 
 
-export default function menu(save) {
+export default function menu(save = null) {
 
     let game = document.getElementById('game')
     game.innerHTML = `

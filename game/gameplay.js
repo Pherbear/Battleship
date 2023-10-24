@@ -5,6 +5,7 @@
 // the index of each ship corresponds to the same order they were loaded in
 // index 0 = 1st ship, index 1 = 2nd ship etc etc
 
+import { loadData, saveData } from "../save-state/save.js"
 import character_selection from "./character_selection.js"
 import menu from "./menu.js"
 
@@ -24,8 +25,18 @@ let enemyModel
 
 let gameEnd = false
 
+let data
+
+
 export default function gameplay(save_state = null, playerCharacter = null){
     
+    data = {
+        positions: positions,
+        attackedCords: attackedCords,
+        playerCharacter: playerCharacter,
+        currentTurn: currentTurn
+    }
+
     //TODO: Create random generation for grid
     //here we will generate the grid, create enemy and player ships
     //will not load new positions if the game is loaded 
@@ -33,7 +44,6 @@ export default function gameplay(save_state = null, playerCharacter = null){
     // 3 ships 2 grid length
     // 1 ship 3 grid length
     // 1 ship 4 grid length
-    
     
     let girl = {
         idleImage: '../assets/sprites/girl_model.png',
@@ -45,78 +55,40 @@ export default function gameplay(save_state = null, playerCharacter = null){
         flinchImage: '../assets/sprites/boy_flinch.png'
     }
     
-    
     if (save_state) {
 
         console.log(`${save_state} has been loaded!`)
 
         //TODO: this is a test for loading, this needs to be replaced
         //with actual save data, this data is hard coded currently
-        positions = [
-                {x: 3, y: 2, direction: 'right', size: 4, affiliate: 'enemy', damage: []},
-                {x: 3, y: 5, direction: 'down', size: 3, affiliate: 'enemy', damage: []},
-                {x: 1, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: []},
-                {x: 7, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: []},
-                {x: 3, y: 9, direction: 'right', size: 2, affiliate: 'enemy', damage: []},
-                {x: 3, y: 2, direction: 'down', size: 4, affiliate: 'player', damage: []},
-                {x: 5, y: 3, direction: 'down', size: 3, affiliate: 'player', damage: []},
-                {x: 1, y: 0, direction: 'right', size: 2, affiliate: 'player', damage: []},
-                {x: 7, y: 2, direction: 'down', size: 2, affiliate: 'player', damage: []},
-                {x: 1, y: 9, direction: 'right', size: 2, affiliate: 'player', damage: []},
-            ]
-        attackedCords = ['3 2 enemy', '3 5 enemy', '2 6 enemy', '3 6 enemy', '3 7 enemy',
-                         '1 0 player', '2 0 player']
-        playerCharacter = 'girl'
-        currentTurn = 'player'
+        // positions = [
+        //         {x: 3, y: 2, direction: 'right', size: 4, affiliate: 'enemy', damage: []},
+        //         {x: 3, y: 5, direction: 'down', size: 3, affiliate: 'enemy', damage: []},
+        //         {x: 1, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: []},
+        //         {x: 7, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: []},
+        //         {x: 3, y: 9, direction: 'right', size: 2, affiliate: 'enemy', damage: []},
+        //         {x: 3, y: 2, direction: 'down', size: 4, affiliate: 'player', damage: []},
+        //         {x: 5, y: 3, direction: 'down', size: 3, affiliate: 'player', damage: []},
+        //         {x: 1, y: 0, direction: 'right', size: 2, affiliate: 'player', damage: []},
+        //         {x: 7, y: 2, direction: 'down', size: 2, affiliate: 'player', damage: []},
+        //         {x: 1, y: 9, direction: 'right', size: 2, affiliate: 'player', damage: []},
+        //     ]
+        // attackedCords = ['3 2 enemy', '3 5 enemy', '2 6 enemy', '3 6 enemy', '3 7 enemy',
+        //                  '1 0 player', '2 0 player']
+        // playerCharacter = 'girl'
+        // currentTurn = 'player'
+        data = loadData()
+        console.log(data)
 
-        // Save the game state to localStorage
-        localStorage.setItem('positions', JSON.stringify(positions));
-        localStorage.setItem('attackedCords', JSON.stringify(attackedCords));
-        localStorage.setItem('playerCharacter', playerCharacter);
-        localStorage.setItem('currentTurn', currentTurn);
+        positions = data.positions
+        attackedCords = data.attackedCords
+        playerCharacter = data.playerCharacter
+        currentTurn = data.currentTurn
 
     } else {
         console.log(`new game`)
         generatePositions()
     }
-    
-     //// Local storage functionality 
-     function storageAvailable(type) {
-        let storage;
-        try {
-          storage = window[type];
-          const x = "__storage_test__";
-          storage.setItem(x, x);
-          storage.removeItem(x);
-          return true;
-        } catch (e) {
-          return (
-            e instanceof DOMException &&
-            (e.code === 22 ||
-             
-              e.code === 1014 ||
-              
-              e.name === "QuotaExceededError" ||
-          
-              e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
-            storage &&
-            storage.length !== 0
-          );
-        }
-      }
-
-    //local storage (save game state)
-    if (storageAvailable("localStorage")) {
-        // Yip kai yay mofo's get ready for the best battleship game ever 
-        // To retrieve the saved game state:
-        if (localStorage.getItem('positions')) {
-            positions = JSON.parse(localStorage.getItem('positions'));
-            attackedCords = JSON.parse(localStorage.getItem('attackedCords'));
-            playerCharacter = localStorage.getItem('playerCharacter');
-            currentTurn = localStorage.getItem('currentTurn');
-        }
-      } 
-
 
     if (playerCharacter == 'boy'){
         playerModel = boy
@@ -317,7 +289,10 @@ function gridMissle(target, fromLoad = false){
         status.innerText = `Miss!`
     }
     
-    if (!fromLoad) switchTurns()
+    if (!fromLoad) {
+        switchTurns()
+        saveData(data)
+    }
 }
 
 function switchView(affiliate){
