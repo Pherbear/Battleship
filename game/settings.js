@@ -7,6 +7,7 @@ export default function settings(save = null){
     let game = document.getElementById('game')
     game.innerHTML = `
         <div class="screen">
+            <h1>Settings</h1>
             <div id="start">
             </div>
             <div id="options" class="buttons"></div>
