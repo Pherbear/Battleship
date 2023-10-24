@@ -70,12 +70,56 @@ export default function gameplay(save_state = null, playerCharacter = null){
         playerCharacter = 'girl'
         currentTurn = 'player'
 
+        // Save the game state to localStorage
+        localStorage.setItem('positions', JSON.stringify(positions));
+        localStorage.setItem('attackedCords', JSON.stringify(attackedCords));
+        localStorage.setItem('playerCharacter', playerCharacter);
+        localStorage.setItem('currentTurn', currentTurn);
+
     } else {
         //TODO: generate cordinates of new game
         console.log(`new game`)
         generatePositions()
     }
     
+     //// Local storage functionality 
+     function storageAvailable(type) {
+        let storage;
+        try {
+          storage = window[type];
+          const x = "__storage_test__";
+          storage.setItem(x, x);
+          storage.removeItem(x);
+          return true;
+        } catch (e) {
+          return (
+            e instanceof DOMException &&
+            (e.code === 22 ||
+             
+              e.code === 1014 ||
+              
+              e.name === "QuotaExceededError" ||
+          
+              e.name === "NS_ERROR_DOM_QUOTA_REACHED") &&
+            storage &&
+            storage.length !== 0
+          );
+        }
+      }
+
+    //local storage (save game state)
+    if (storageAvailable("localStorage")) {
+        // Yip kai yay mofo's get ready for the best battleship game ever 
+        // To retrieve the saved game state:
+        if (localStorage.getItem('positions')) {
+            positions = JSON.parse(localStorage.getItem('positions'));
+            attackedCords = JSON.parse(localStorage.getItem('attackedCords'));
+            playerCharacter = localStorage.getItem('playerCharacter');
+            currentTurn = localStorage.getItem('currentTurn');
+        }
+      } 
+
+
     if (playerCharacter == 'boy'){
         playerModel = boy
         enemyModel = girl
