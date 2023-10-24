@@ -105,6 +105,7 @@ export default function gameplay(save_state = null, playerCharacter = null){
                 <div class="grid">
                 </div>
             </div>
+            <button id="force">Force Game Over</button>
         </div>
         <div>
             <div id="status" class="status">
@@ -183,9 +184,12 @@ export default function gameplay(save_state = null, playerCharacter = null){
         element.addEventListener("click", clickedAttack)
     }
 
+    console.log(document.querySelector('#force'))
+    document.querySelector('#force').addEventListener("click", forceGameOver)
     attackFromLoad(attackedCords)
     switchView(currentTurn)
 }
+
 
 let delay = false
 
@@ -194,7 +198,7 @@ function switchTurns(){
     else if (currentTurn == 'player') currentTurn = 'enemy'
 
     delay = true
-
+    
     setTimeout(function(){
         delay = false
         switchView(currentTurn)
@@ -219,7 +223,7 @@ function randomAttack(){
     }
 
     attackedCords.push(`${x} ${y} player`)
-
+    
     let targetElement = document.getElementById(`${x} ${y} player`)
     gridMissle(targetElement)
 }
@@ -252,10 +256,10 @@ function gridMissle(target, fromLoad = false){
     let y = cords[1]
     //enemy or player
     let affiliate = cords[2]
-
+    
     let ship
     let shipSectionIndex
-
+    
     if (affiliate == 'enemy'){
         ship = enemyGrid[x][y][0]
         shipSectionIndex = enemyGrid[x][y][1]
@@ -275,18 +279,18 @@ function gridMissle(target, fromLoad = false){
         target.style.cssText = `background:yellow;opacity:0.5;`
         status.innerText = `Miss!`
     }
-
+    
     // if (!fromLoad) switchTurns()
 }
 
 function switchView(affiliate){
-
+    
     let player = game.querySelector(".player")
     let playerArrow = game.querySelector(".player_turn")
 
     let enemy = game.querySelector(".enemy")
     let enemyArrow = game.querySelector(".enemy_turn")
-
+    
 
     if (affiliate == 'player'){
         player.style.display = "none"
@@ -322,7 +326,7 @@ function generateShip(ship){
         case 2:
             ship_type = 'small'
             break;
-        default:
+            default:
             ship_type = 'large'
             break;
     }
@@ -337,15 +341,15 @@ function generateShip(ship){
     
     let displayNone
     if(ship.affiliate == 'enemy') displayNone = `display: none;`
-
+    
     let html = `
     <div class = "ship_container" id="ship${positions.indexOf(ship)}"
         style = "grid-area: ${y+1} / ${x+1} / ${targety} / ${targetx}; ${displayNone}">
         <img src="${ship_image}"
-            class = "ship_image">
-            </div>
-            `
-    
+        class = "ship_image">
+        </div>
+        `
+        
     return html
 }
 
@@ -364,15 +368,15 @@ function generateShipHTML(ship){
         case 3:
             shipType = 'Medium'
             break;
-        case 2:
-            shipType = 'Small'
+            case 2:
+                shipType = 'Small'
             break;
         default:
             shipType = 'Unknown'
             break;
-    }
+        }
     
-    let status = 'Active'
+        let status = 'Active'
     let fullDamage = true
     let style = ''
 
@@ -385,16 +389,16 @@ function generateShipHTML(ship){
             style = 'style="color: yellow;"'
         }
     }
-
+    
     if (fullDamage) {
         status = 'Inactive'
         style = 'style="color: red;"'
     }
-
+    
     let capitalized = affiliate.charAt(0).toUpperCase() + affiliate.slice(1)
     let html = `<div id="${affiliate}_ship_${index}" class="ship_status">
-                    ${capitalized} ${shipType} Vessel: <a ${style}>${status}</a>
-                </div>`
+    ${capitalized} ${shipType} Vessel: <a ${style}>${status}</a>
+    </div>`
     
     return html
 }
@@ -414,13 +418,13 @@ function isShipSunk(ship){
     let affiliate = ship.affiliate
     let index = positions.indexOf(ship)
     let id = `ship${index}`
-
+    
     let boat_image = document.getElementById(id)
 
     let ship_html = document.getElementById(`${affiliate}_ship_${index}`).querySelector("a")
     ship_html.innerText = "Damaged"
     ship_html.style.color = "yellow"
-
+    
     for(const section of ship.damage){
         if(section == 0) return 
     }
@@ -446,48 +450,51 @@ function groupPlayers(positions, prop)
 }
 
 
-function gameover(myShip)
+function gameover(myShip, forcegameover)
 {
     let gameover
     let players = groupPlayers(positions, 'affiliate')
-    if(myShip.affiliate == 'enemy')
-    {
-        for(const ship of players.enemy)
+
+    if(!forcegameover){
+        if(myShip.affiliate == 'enemy')
         {
-            for(let i = 0; i < ship.damage.length; i++)
+            for(const ship of players.enemy)
             {
-                if(ship.damage[i] == 1)
+                for(let i = 0; i < ship.damage.length; i++)
                 {
-                    gameover = true
-                }
-                else
-                {
-                    gameover = false
-                    return
+                    if(ship.damage[i] == 1)
+                    {
+                        gameover = true
+                    }
+                    else
+                    {
+                            gameover = false
+                        return
+                    }
                 }
             }
         }
-    }
-    else if(myShip.affiliate == 'player')
-    {
-        for(const ship of players.player)
+        else if(myShip.affiliate == 'player')
         {
-            for(let i = 0; i < ship.damage.length; i++)
+            for(const ship of players.player)
             {
-                if(ship.damage[i] == 1)
+                for(let i = 0; i < ship.damage.length; i++)
                 {
-                    gameover = true
-                }
-                else
-                {
-                    gameover = false
-                    return
+                    if(ship.damage[i] == 1)
+                    {
+                        gameover = true
+                    }
+                    else
+                    {
+                        gameover = false
+                        return
+                    }
                 }
             }
         }
     }
 
-    if(gameover)
+    if(gameover || forcegameover)
     {
         gameEnd = true
         let game = document.getElementById("game")
@@ -498,6 +505,7 @@ function gameover(myShip)
             </div>`
 
         let game_options = ['RETRY', 'EXIT']
+        
         
         let options = document.getElementById('options')
         for(let option of game_options) {
@@ -526,6 +534,11 @@ function gameover(myShip)
 
         // alert("game over")
     }
+}
+
+function forceGameOver(){
+    console.log('force game over')
+    gameover(positions[0], true)
 }
 
 function loadgrid(grid, affiliate){
