@@ -14,15 +14,13 @@ export default function settings(save = null){
             <div id="options" class="buttons"></div>
         </div>
     `
-    let game_options = ['SLOW', 'NORMAL', 'FAST','clear save data', 'Back']
+    let game_options = ['SLOW', 'NORMAL', 'FAST', 'clear save data', 'Back']
     
     let options = document.getElementById('options')
     for(let option of game_options) {
         //adding all the buttons to start menu
         options.innerHTML += `<button>${option}</button>`
     }
-
-    options.style.paddingTop = "250px"
 
     let buttons = options.querySelectorAll('button')
     for(let button of buttons) {
