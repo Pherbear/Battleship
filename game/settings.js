@@ -1,4 +1,5 @@
 import game from '../main.js'
+import { clearGameData } from '../save-state/save.js'
 import menu from './menu.js'
 
 export default function settings(save = null){
@@ -12,7 +13,7 @@ export default function settings(save = null){
         </div>
     `
 
-    let game_options = ['option 1', 'option 2', 'Back']
+    let game_options = ['clear save data', 'Back']
     
     let options = document.getElementById('options')
     for(let option of game_options) {
@@ -20,14 +21,16 @@ export default function settings(save = null){
         options.innerHTML += `<button>${option}</button>`
     }
 
+    options.style.paddingTop = "250px"
+
     let buttons = options.querySelectorAll('button')
     for(let button of buttons) {
         button.addEventListener("click", function(e) {
             let option = e.target.innerText
             switch(option){
-                case 'option 1':
-                    break;
-                case 'option 2':
+                case 'clear save data':
+                    clearGameData()
+                    save = null
                     break;
                 case 'Back':
                     menu(save)
@@ -37,8 +40,4 @@ export default function settings(save = null){
             }
         })
     }
-}
-
-function listener(e){
-    
 }

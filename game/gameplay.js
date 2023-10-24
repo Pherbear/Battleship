@@ -5,7 +5,7 @@
 // the index of each ship corresponds to the same order they were loaded in
 // index 0 = 1st ship, index 1 = 2nd ship etc etc
 
-import { loadData, saveData } from "../save-state/save.js"
+import { saveData } from "../save-state/save.js"
 import character_selection from "./character_selection.js"
 import menu from "./menu.js"
 
@@ -27,9 +27,8 @@ let gameEnd = false
 
 let data
 
-
 export default function gameplay(save_state = null, playerCharacter = null){
-    
+
     data = {
         positions: positions,
         attackedCords: attackedCords,
@@ -37,7 +36,6 @@ export default function gameplay(save_state = null, playerCharacter = null){
         currentTurn: currentTurn
     }
 
-    //TODO: Create random generation for grid
     //here we will generate the grid, create enemy and player ships
     //will not load new positions if the game is loaded 
     //enemy and player will have 5 ships:
@@ -56,29 +54,7 @@ export default function gameplay(save_state = null, playerCharacter = null){
     }
     
     if (save_state) {
-
-        console.log(`${save_state} has been loaded!`)
-
-        //TODO: this is a test for loading, this needs to be replaced
-        //with actual save data, this data is hard coded currently
-        // positions = [
-        //         {x: 3, y: 2, direction: 'right', size: 4, affiliate: 'enemy', damage: []},
-        //         {x: 3, y: 5, direction: 'down', size: 3, affiliate: 'enemy', damage: []},
-        //         {x: 1, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: []},
-        //         {x: 7, y: 5, direction: 'down', size: 2, affiliate: 'enemy', damage: []},
-        //         {x: 3, y: 9, direction: 'right', size: 2, affiliate: 'enemy', damage: []},
-        //         {x: 3, y: 2, direction: 'down', size: 4, affiliate: 'player', damage: []},
-        //         {x: 5, y: 3, direction: 'down', size: 3, affiliate: 'player', damage: []},
-        //         {x: 1, y: 0, direction: 'right', size: 2, affiliate: 'player', damage: []},
-        //         {x: 7, y: 2, direction: 'down', size: 2, affiliate: 'player', damage: []},
-        //         {x: 1, y: 9, direction: 'right', size: 2, affiliate: 'player', damage: []},
-        //     ]
-        // attackedCords = ['3 2 enemy', '3 5 enemy', '2 6 enemy', '3 6 enemy', '3 7 enemy',
-        //                  '1 0 player', '2 0 player']
-        // playerCharacter = 'girl'
-        // currentTurn = 'player'
-        data = loadData()
-        console.log(data)
+        data = save_state
 
         positions = data.positions
         attackedCords = data.attackedCords
@@ -111,12 +87,28 @@ export default function gameplay(save_state = null, playerCharacter = null){
         <div class="grid_container">
             <div class="player">
                 Player's grid:
-                <div class="grid">
+                <div class ="top-container">
+                    <div class ="top-labels" id="top-labels">
+                    </div>
+                    <div class="left-container">
+                        <div class="left-labels" id="left-labels">
+                        </div>
+                        <div class="grid">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="enemy">
                 Enemy's grid:
-                <div class="grid">
+                <div class ="top-container">
+                    <div class ="top-labels" id="top-labels">
+                    </div>
+                    <div class="left-container">
+                        <div class="left-labels" id="left-labels">
+                        </div>
+                        <div class="grid">
+                        </div>
+                    </div>
                 </div>
             </div>
             <button id="force">Force Game Over</button>
@@ -144,9 +136,25 @@ export default function gameplay(save_state = null, playerCharacter = null){
         </div>
     </div>
     `
-
     let player = game.querySelector(".player")
     let enemy = game.querySelector(".enemy")
+
+    let left_labels_enemy = enemy.querySelector('#left-labels')
+    let top_labels_enemy = enemy.querySelector('#top-labels')
+
+    let left_labels_player = player.querySelector('#left-labels')
+    let top_labels_player = player.querySelector('#top-labels')
+
+    top_labels_enemy.innerHTML += `<div class="label"></div>`
+    top_labels_player.innerHTML += `<div class="label"></div>`
+
+    for(let i = 0; i < gridSize; i++){
+        left_labels_player.innerHTML += `<div class="label"><div>${String.fromCharCode(65 + i)}</div></div>`
+        top_labels_player.innerHTML += `<div class="label"><div>${i+1}</div></div>`
+        left_labels_enemy.innerHTML += `<div class="label"><div>${String.fromCharCode(65 + i)}</div></div>`
+        top_labels_enemy.innerHTML += `<div class="label"><div>${i+1}</div></div>`
+    }
+
     //here we are generating the ships based off the data we are given from
     //our save data or data generated by a new game
 
@@ -542,8 +550,6 @@ function gameover(myShip, forcegameover = false)
                 }
             })
         }
-
-        // alert("game over")
     }
 }
 
@@ -696,4 +702,5 @@ function reset()
     enemyCordsUsed = []
 
     gameEnd = false
+    delay = false
 }

@@ -1,0 +1,40 @@
+.left-labels, .top-labels{
+    display: flex;
+    gap: 2px;
+}
+.left-labels{
+    flex-direction: column;
+    padding-right: 2px;
+}
+.top-labels {
+    padding-bottom: 2px;
+}
+
+.label{
+    color: orange;
+    width: 48.4px;
+    height: 48.4px;
+    border: black 1px solid;
+}
+
+.top-labels .label div{
+    color: blue;
+    padding-top: 27px;
+    padding-left: 18px;
+}
+
+.top-labels .label:nth-child(11) div{
+    padding-left: 14px;
+}
+
+.left-labels .label div {
+    color: blue;
+    position: relative;
+    padding-left: 30px;
+    padding-top: 15px;
+}
+
+.left-container{
+    display: flex;
+    flex-direction: row;
+}
