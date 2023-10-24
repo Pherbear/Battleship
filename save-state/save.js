@@ -1,6 +1,3 @@
-//TODO: logic for saving data here
-
-
 function saveData(data){   
     localStorage.setItem('positions', JSON.stringify(data.positions));
     localStorage.setItem('attackedCords', JSON.stringify(data.attackedCords));

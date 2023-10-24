@@ -15,12 +15,9 @@ import {clearGameData, loadData} from './save-state/save.js'
 
 export default function game() {
     //will check if there is a save state and load it
-    //TODO: import save_data from save-state
     
     //boolean for save_data loaded
-    //clearGameData()
     let save_data = loadData()
-    console.log(save_data)
 
     //this calls menu() imported from ./game/menu.js, 
     //which loads the main menu
@@ -28,8 +25,6 @@ export default function game() {
 
     //uncomment this to work on gameplay and skip menu
     //gameplay(save_data)
-
-    //TODO: save current game
 }
 
 

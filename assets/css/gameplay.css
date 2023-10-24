@@ -3,7 +3,7 @@
     background-image: url('../background/gameplay_background.jpg');
     z-index: -2;
     font-size: 20px;
-    text-shadow: 1px 1px 2px pink;
+    text-shadow: 1px 1px 2px rgb(54, 6, 6);
     display: flex;
     background-size: cover;
     justify-content: center;
@@ -11,12 +11,13 @@
 
 .status{
     font-size: 40px;
-    color: whitesmoke;
+    color: rgb(0, 0, 0);
     padding: 40px;
-    background: black;
+    background: rgb(11, 129, 192);
     margin-left: 30px;
     margin-top: 20px;
-    display: inline-block
+    display: inline-block;
+    border: black 3px dotted;
 }
 
 .ship_status{
@@ -24,6 +25,7 @@
 }
 .ship_status a {
     color: green;
+    text-shadow: 2px 2px 2px rgb(54, 6, 6);
 }
 
 .grid{
