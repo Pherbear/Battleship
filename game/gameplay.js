@@ -27,8 +27,14 @@ let gameEnd = false
 
 let data
 
+<<<<<<< HEAD
 export default function gameplay(save_state = null, playerCharacter = null){
 
+=======
+
+function gameplay(save_state = null, playerCharacter = null){
+    
+>>>>>>> 76c73e6940f0b32a8b629c42891b12d154c0c56d
     data = {
         positions: positions,
         attackedCords: attackedCords,
@@ -207,8 +213,12 @@ export default function gameplay(save_state = null, playerCharacter = null){
     switchView(currentTurn)
 }
 
-
+let timer = 500
 let delay = false
+
+function adjustTimer(time){
+    timer = time
+}
 
 function switchTurns(){
     if(currentTurn == 'enemy') currentTurn = 'player'
@@ -222,9 +232,9 @@ function switchTurns(){
         if(currentTurn == 'enemy'){
             setTimeout(function(){
                 randomAttack()
-            }, 500)
+            }, timer)
         }
-    }, 1000)    
+    }, timer*2)    
 
 }
 
@@ -702,5 +712,11 @@ function reset()
     enemyCordsUsed = []
 
     gameEnd = false
+<<<<<<< HEAD
     delay = false
 }
+=======
+}
+
+export {gameplay, adjustTimer}
+>>>>>>> 76c73e6940f0b32a8b629c42891b12d154c0c56d

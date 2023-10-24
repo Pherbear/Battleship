@@ -1,5 +1,5 @@
 import character_selection from './character_selection.js'
-import gameplay from './gameplay.js'
+import {gameplay} from './gameplay.js'
 import settings from './settings.js'
 
 

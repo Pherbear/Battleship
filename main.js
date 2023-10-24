@@ -10,8 +10,8 @@
 //import enemy from './game/enemy'
 //import battle-logic from './game/battle-logic'
 import menu from './game/menu.js'
-import gameplay from './game/gameplay.js'
-import {loadData} from './save-state/save.js'
+import {gameplay} from './game/gameplay.js'
+import {clearGameData, loadData} from './save-state/save.js'
 
 export default function game() {
     //will check if there is a save state and load it
