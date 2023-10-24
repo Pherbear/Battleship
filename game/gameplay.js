@@ -287,6 +287,7 @@ function gridMissle(target, fromLoad = false){
         flinch(affiliate)
         isShipSunk(ship)
         gameover(ship)
+        affect(x,y,ship.affiliate)
     } else {
         target.style.cssText = `background:yellow;opacity:0.5;`
         status.innerText = `Miss!`
@@ -296,6 +297,15 @@ function gridMissle(target, fromLoad = false){
         switchTurns()
         saveData(data)
     }
+}
+
+function affect(x, y, affiliate){
+    let area = document.getElementById(`${x} ${y} ${affiliate}`)
+    area.innerHTML += `<img src="../assets/sprites/Explosion.gif" class="gif"></img>`
+
+    setTimeout(function(){
+        area.innerHTML = ``
+    }, 1000)
 }
 
 function switchView(affiliate){
