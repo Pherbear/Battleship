@@ -5,6 +5,9 @@
 // the index of each ship corresponds to the same order they were loaded in
 // index 0 = 1st ship, index 1 = 2nd ship etc etc
 
+import character_selection from "./character_selection.js"
+import menu from "./menu.js"
+
 
 const gridSize = 10
 let playerGrid = []
@@ -31,7 +34,8 @@ export default function gameplay(save_state = null, playerCharacter = null){
     // 3 ships 2 grid length
     // 1 ship 3 grid length
     // 1 ship 4 grid length
-
+    
+    
     let girl = {
         idleImage: '../assets/sprites/girl_model.png',
         flinchImage: '../assets/sprites/girl_flinch.png'
@@ -458,7 +462,6 @@ function gameover(myShip)
                 }
                 else
                 {
-                    
                     gameover = false
                     return
                 }
@@ -488,49 +491,39 @@ function gameover(myShip)
     {
         gameEnd = true
         let game = document.getElementById("game")
-        let overScreen = `
-                <div id="popup">
-                    <h1>Game Over</h1>
-                    <div id="options" class="buttons"></div>
-                </div>
-                `
-                // `
-        //     <div id="popup">
-        //         <h1>Game Over</h1>
-        //         <button onClick="character_selection()">RETRY</button>
-        //         <button onClick="menu()">Exit</button>
-        //     </div>`
-        game.innerHTML += overScreen
+        game.innerHTML += `
+            <div id="popup">
+                <h1>Game Over</h1>
+                <div id="options"></div>
+            </div>`
 
         let game_options = ['RETRY', 'EXIT']
-    if (save) {
-        //adds continue option to game_options if there is a save file
-        game_options.unshift('continue game')
-    }
-
+        
         let options = document.getElementById('options')
-    for(let option of game_options) {
-        //adding all the buttons to start menu
-        options.innerHTML += `<button>${option}</button>`
-    }
+        for(let option of game_options) {
+            //adding all the buttons to start menu
+            options.innerHTML += `<button>${option}</button>`
+        }
+    
+        let buttons = options.querySelectorAll('button')
+        for(let button of buttons) {
+            button.addEventListener("click", function(e) {
+                let option = e.target.innerText
+                switch(option){
+                    case 'RETRY':
+                        reset()
+                        character_selection()
+                        break;
+                    case 'EXIT':
+                        reset()
+                        menu()
+                        break;
+                    default:
+                        break;
+                }
+            })
+        }
 
-    let buttons = options.querySelectorAll('button')
-    for(let button of buttons) {
-        button.addEventListener("click", function(e) {
-            let option = e.target.innerText
-            switch(option){
-                case 'RETRY':
-                    character_selection()
-                    //gameplay()
-                    break;
-                case 'EXIT':
-                    menu()
-                    break;
-                default:
-                    break;
-            }
-        })
-    }
         // alert("game over")
     }
 }
@@ -667,4 +660,18 @@ function flinch(affiliate){
         element.src = `${idleImage}`
     }, 1000)
 
+}
+
+function reset()
+{
+    playerGrid = []
+    enemyGrid = []
+    populateArray(gridSize, playerGrid)
+    populateArray(gridSize, enemyGrid)
+
+    positions = []
+    attackedCords = []
+    currentTurn = 'player'
+
+    gameEnd = false
 }
