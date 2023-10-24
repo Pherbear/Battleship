@@ -1,5 +1,6 @@
 import game from '../main.js'
 import menu from './menu.js'
+import {gameplay, adjustTimer} from './gameplay.js'
 
 export default function settings(save = null){
 
@@ -12,7 +13,7 @@ export default function settings(save = null){
         </div>
     `
 
-    let game_options = ['option 1', 'option 2', 'Back']
+    let game_options = ['SLOW', 'NORMAL', 'FAST', 'Back']
     
     let options = document.getElementById('options')
     for(let option of game_options) {
@@ -20,14 +21,21 @@ export default function settings(save = null){
         options.innerHTML += `<button>${option}</button>`
     }
 
+    
+
     let buttons = options.querySelectorAll('button')
     for(let button of buttons) {
         button.addEventListener("click", function(e) {
             let option = e.target.innerText
             switch(option){
-                case 'option 1':
+                case 'SLOW':
+                    adjustTimer(700);
                     break;
-                case 'option 2':
+                case 'NORMAL':
+                    adjustTimer(500);
+                    break;
+                case 'FAST':
+                    adjustTimer(50);
                     break;
                 case 'Back':
                     menu(save)

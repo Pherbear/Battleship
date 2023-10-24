@@ -1,4 +1,4 @@
-import gameplay from "./gameplay.js"
+import {gameplay} from "./gameplay.js"
 
 export default function character_selection(){
 
