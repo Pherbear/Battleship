@@ -12,7 +12,7 @@ export default function settings(save = null){
         </div>
     `
 
-    let game_options = ['option_1', 'option_2', 'Back']
+    let game_options = ['option 1', 'option 2', 'Back']
     
     let options = document.getElementById('options')
     for(let option of game_options) {
