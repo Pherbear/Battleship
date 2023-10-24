@@ -274,7 +274,7 @@ function gridMissle(target, fromLoad = false){
         ship.damage[shipSectionIndex] = 1
         flinch(affiliate)
         isShipSunk(ship)
-        gameover(ship)
+        gameover(ship, true)
     } else {
         target.style.cssText = `background:yellow;opacity:0.5;`
         status.innerText = `Miss!`
@@ -510,7 +510,7 @@ function gameover(myShip, forcegameover)
         let options = document.getElementById('options')
         for(let option of game_options) {
             //adding all the buttons to start menu
-            options.innerHTML += `<button>${option}</button>`
+            options.innerHTML += `<button class="button">${option}</button>`
         }
     
         let buttons = options.querySelectorAll('button')
