@@ -23,10 +23,10 @@ export default function menu(save = null) {
     //when calling the functions
     //ex. 'continue game' will call continue_game()
 
-    let game_options = ['start', 'settings']
+    let game_options = ['New Game', 'Settings']
     if (save) {
         //adds continue option to game_options if there is a save file
-        game_options.unshift('continue game')
+        game_options.unshift('Continue Game')
     }
     
     let options = document.getElementById('options')
@@ -36,7 +36,6 @@ export default function menu(save = null) {
         <div class="button_container">
             <img src="../assets/sprites/small_ship_right.jpg" class="left_side_button">
             <button>${option}</button>
-            <img src="../assets/sprites/small_ship_right.jpg" class="right_side_button">
         </div>
         `
     }
@@ -46,13 +45,13 @@ export default function menu(save = null) {
         button.addEventListener("click", function(e) {
             let option = e.target.innerText
             switch(option){
-                case 'start':
+                case 'New Game':
                     character_selection()
                     break;
-                case 'settings':
+                case 'Settings':
                     settings(save)
                     break;
-                case 'continue game':
+                case 'Continue Game':
                     gameplay(save)
                     break;
                 default:
