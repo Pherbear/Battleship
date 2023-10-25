@@ -32,7 +32,13 @@ export default function menu(save = null) {
     let options = document.getElementById('options')
     for(let option of game_options) {
         //adding all the buttons to start menu
-        options.innerHTML += `<button>${option}</button>`
+        options.innerHTML += `
+        <div class="button_container">
+            <img src="../assets/sprites/small_ship_right.jpg" class="left_side_button">
+            <button>${option}</button>
+            <img src="../assets/sprites/small_ship_right.jpg" class="right_side_button">
+        </div>
+        `
     }
 
     let buttons = options.querySelectorAll('button')

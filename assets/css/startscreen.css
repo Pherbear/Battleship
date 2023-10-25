@@ -25,12 +25,28 @@
         gap: 30px;
     }
 
+    .button_container button{
+        width: 600px;
+    }
+
     .buttons button{
         height: 40px;
         background: blue;
         font-size: 30px;
         cursor: pointer;
     }
+
+    .left_side_button, .right_side_button{
+        display: none;
+    }
+
+    .button_container:hover > .left_side_button,
+    .button_container:hover > .right_side_button
+    {
+        height: 40px;
+        display: block;
+    }
+
 
     #options{
         display: flex;
@@ -43,7 +59,6 @@
     background-size: cover;
     height: 100vh;
     width: 100vw;
-    
     }
 
     .screen h1{

@@ -56,4 +56,7 @@ export default function settings(save = null){
             }
         })
     }
+
+    let buttonIcon = document.querySelectorAll('h1')
+    console.log(buttonIcon)
 }

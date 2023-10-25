@@ -46,10 +46,7 @@
     position: relative;
     cursor: url('../sprites/cursor.png'), pointer;
     background-image: url('../background/ocean.jpg');
-}
-
-body {
-    cursor: url('../sprites/cursor.jpg'), auto;
+    background-size: cover;
 }
 
 .player{ 

@@ -125,14 +125,12 @@ function gameplay(save_state = null, playerCharacter = null){
                 <div id="player_model" class="character">
                     <div class="player_turn turn">
                         Player Turn
-                        <img src="../assets/sprites/green_arrow.png" class="arrow">
                     </div>
                     <img src="${playerModel.idleImage}" class="player_image">
                 </div>
                 <div id="enemy_model" class="character">
                     <div class="enemy_turn turn">
                         Enemy Turn
-                        <img src="../assets/sprites/red_arrow.png" class="arrow">
                     </div>
                     <img src="${enemyModel.idleImage}" class="enemy_image">
                 </div>
