@@ -14,6 +14,17 @@
         gap: 50px;
     }
 
+    .speed_settings{
+        font-size: 40px;
+        color: white;
+    }
+
+    .buttons div{
+        align-self: center;
+        display: flex;
+        gap: 30px;
+    }
+
     .buttons button{
         height: 40px;
         background: blue;

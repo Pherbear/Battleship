@@ -14,9 +14,18 @@ export default function settings(save = null){
             <div id="options" class="buttons"></div>
         </div>
     `
-    let game_options = ['SLOW', 'NORMAL', 'FAST', 'clear save data', 'Back']
+    let game_options = ['clear save data', 'Back']
     
     let options = document.getElementById('options')
+
+    options.innerHTML = 
+    `<div class="speed_settings"> 
+        Game Speed:
+        <button>SLOW</button>
+        <button>NORMAL</button>
+        <button>FAST</button>
+    </div>`
+
     for(let option of game_options) {
         //adding all the buttons to start menu
         options.innerHTML += `<button>${option}</button>`
