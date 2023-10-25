@@ -286,6 +286,7 @@ function gridMissle(target, fromLoad = false){
         status.innerText = `Hit!`
         audio = new Audio('/assets/sound/Explosion.mp3')
         audio.loop = false
+        audio.volume = 0.4
         audio.play()
         ship.damage[shipSectionIndex] = 1
         flinch(affiliate)
