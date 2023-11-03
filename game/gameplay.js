@@ -282,7 +282,7 @@ function gridMissle(target, fromLoad = false){
     if(ship){
         target.style.cssText = `background:red;opacity:0.5;`
         status.innerText = `Hit!`
-        audio = new Audio('/assets/sound/Explosion.mp3')
+        audio = new Audio('../assets/sound/Explosion.mp3')
         audio.loop = false
         audio.volume = 0.4
         audio.play()
@@ -294,7 +294,7 @@ function gridMissle(target, fromLoad = false){
     } else {
         target.style.cssText = `background:yellow;opacity:0.5;`
         status.innerText = `Miss!`
-        audio = new Audio('/assets/sound/splash3.mp3')
+        audio = new Audio('../assets/sound/splash3.mp3')
         audio.loop = false
         audio.play()
     }
