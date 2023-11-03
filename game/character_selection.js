@@ -12,8 +12,8 @@ export default function character_selection(){
                 <div class="character_selection">
                     <a>Choose Your Character:</a>
                     <div class="characters">
-                        <img src="../assets/sprites/boy_model.png" id="boy">
-                        <img src="../assets/sprites/girl_model.png" id="girl">
+                        <img src="./assets/sprites/boy_model.png" id="boy">
+                        <img src="./assets/sprites/girl_model.png" id="girl">
                     </div>
                 </div>
             </div>
