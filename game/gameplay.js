@@ -45,13 +45,13 @@ function gameplay(save_state = null, playerCharacter = null){
     // 1 ship 4 grid length
     
     let girl = {
-        idleImage: '../assets/sprites/girl_model.png',
-        flinchImage: '../assets/sprites/girl_flinch.png'
+        idleImage: './assets/sprites/girl_model.png',
+        flinchImage: './assets/sprites/girl_flinch.png'
     }
 
     let boy = {
-        idleImage: '../assets/sprites/boy_model.png',
-        flinchImage: '../assets/sprites/boy_flinch.png'
+        idleImage: './assets/sprites/boy_model.png',
+        flinchImage: './assets/sprites/boy_flinch.png'
     }
     
     if (save_state) {
@@ -307,7 +307,7 @@ function gridMissle(target, fromLoad = false){
 
 function affect(x, y, affiliate){
     let area = document.getElementById(`${x} ${y} ${affiliate}`)
-    area.innerHTML += `<img src="../assets/sprites/Explosion.gif" class="gif"></img>`
+    area.innerHTML += `<img src="./assets/sprites/Explosion.gif" class="gif"></img>`
 
     setTimeout(function(){
         area.innerHTML = ``
@@ -368,7 +368,7 @@ function generateShip(ship){
         targetx += size
     }
     
-    let ship_image = `../assets/sprites/${ship_type}_ship_${direction}.jpg`
+    let ship_image = `./assets/sprites/${ship_type}_ship_${direction}.jpg`
     
     let displayNone
     if(ship.affiliate == 'enemy') displayNone = `display: none;`
