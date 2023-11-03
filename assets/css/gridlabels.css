@@ -38,3 +38,13 @@
     display: flex;
     flex-direction: row;
 }
+
+@media screen and (min-width: 400px) {
+    .label{
+        width: 70px;
+        height: 70px;
+    }
+    .enemy, .player{
+        font-size: 35px;
+    }
+}

@@ -10,6 +10,9 @@
     justify-content: center;
 }
 
+
+
+
 .gif{
     position: absolute;
     width: 50px;
@@ -165,4 +168,34 @@
     font-weight: bolder;
     font-family: 'Times New Roman', Times, serif;
     font-size: large;
+}
+
+@media screen and (min-width: 400px) {
+    .gameplay{
+        flex-direction: column;
+    }
+    #characters{
+        padding-left: 160px;
+        gap: 140px;
+    }
+    .player_image, .enemy_image{
+        width: 300px;
+        height: 300px;
+    }
+    .turn{
+        font-size: 30px;
+    }
+    .grid{
+        grid-template-columns: repeat(10, 70px);
+        grid-template-rows: repeat(10, 70px);
+        gap: 3px 3px;
+    }
+    .ship_status{
+        font-size: 50px;
+    }
+    .group{
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+    }
 }

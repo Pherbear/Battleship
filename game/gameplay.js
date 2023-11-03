@@ -117,7 +117,7 @@ function gameplay(save_state = null, playerCharacter = null){
             </div>
             <button id="force">Force Game Over</button>
         </div>
-        <div>
+        <div class="group">
             <div id="status" class="status">
                 <div id="hit">Start Attacking!</div>
             </div>
