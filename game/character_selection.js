@@ -1,6 +1,16 @@
 import {gameplay} from "./gameplay.js"
 
-export default function character_selection(){
+let pvp
+
+export default function character_selection(pvp = false){
+    
+
+    let selection_message
+    if (pvp){
+        selection_message = `Choose 1st Player Character:`
+    } else {
+        selection_message = `Choose Your Character:`
+    }
 
     let game = document.getElementById('game')
     game.innerHTML = `
@@ -10,7 +20,7 @@ export default function character_selection(){
                     <img src="./assets/start-screen/title.jpg">  
                 </div>
                 <div class="character_selection">
-                    <a>Choose Your Character:</a>
+                    <a>${selection_message}</a>
                     <div class="characters">
                         <img src="./assets/sprites/boy_model.png" id="boy">
                         <img src="./assets/sprites/girl_model.png" id="girl">
@@ -25,5 +35,5 @@ export default function character_selection(){
 }
 
 function listener(e){
-    gameplay(null, e.target.id)
+    gameplay(null, e.target.id, pvp)
 }

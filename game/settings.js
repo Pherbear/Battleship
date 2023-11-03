@@ -18,25 +18,49 @@ export default function settings(save = null){
     
     let options = document.getElementById('options')
 
+    let speed_options = ['SLOW', 'NORMAL', 'FAST']
+
     options.innerHTML = 
-    `<div class="speed_settings"> 
-        Game Speed:
-        <button>SLOW</button>
-        <button>NORMAL</button>
-        <button>FAST</button>
+    `<div class="speed_settings speed_container" id="speed_settings"> 
+        <div>Game Speed:</div>
     </div>`
+        
+    for (let speed of speed_options){
+        let item = document.getElementById('speed_settings')
+
+        item.innerHTML += `<button id='${speed}'></button>`
+
+        let style = document.getElementById(speed).style
+
+        style.backgroundImage = `url("./assets/buttons/${speed}.png")`
+        style.backgroundSize = `cover`
+        style.backgroundPosition = `center`
+
+    }
+
 
     for(let option of game_options) {
-        //adding all the buttons to start menu
-        options.innerHTML += `<button>${option}</button>`
+        let no_space = option.replace(/ /g,"_")
+
+        options.innerHTML += `
+        <div class="button_container">
+            <img src="./assets/sprites/small_ship_right.jpg" class="left_side_button">
+            <button id='${no_space}'></button>
+        </div>
+        `
+        let style = document.getElementById(no_space).style
+
+        style.backgroundImage = `url("./assets/buttons/${no_space}.png")`
+        style.backgroundSize = `cover`
     }
 
     let buttons = options.querySelectorAll('button')
+
     for(let button of buttons) {
         button.addEventListener("click", function(e) {
-            let option = e.target.innerText
+            let option = e.target.id
             switch(option){
-                case 'clear save data':
+                case 'clear_save_data':
                     clearGameData()
                     save = null
                 case 'SLOW':

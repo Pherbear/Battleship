@@ -27,9 +27,13 @@ let gameEnd = false
 
 let data
 
+let pvp = false
 
-function gameplay(save_state = null, playerCharacter = null){
+
+function gameplay(save_state = null, playerCharacter = null, pvp_option = false){
     
+    pvp = pvp_option
+
     data = {
         positions: positions,
         attackedCords: attackedCords,
