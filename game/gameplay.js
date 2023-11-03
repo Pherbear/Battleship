@@ -294,6 +294,7 @@ function gridMissle(target, fromLoad = false){
     } else {
         target.style.cssText = `background:yellow;opacity:0.5;`
         status.innerText = `Miss!`
+        
         audio = new Audio('../assets/sound/splash3.mp3')
         audio.loop = false
         audio.play()
