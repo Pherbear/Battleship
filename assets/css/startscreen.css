@@ -58,7 +58,7 @@
 
     body{
         /* background-image: url("/assets/start-screen/ship.jpg");  */
-        background-image: url("/background/background.png");
+        background-image: url("../background/background.png");
         background-size: cover;
         height: 100vh;
         width: 100vw;
