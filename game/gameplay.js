@@ -50,7 +50,7 @@ function gameplay(save_state = null, playerCharacter = null, pvp_option = false)
     
     let girl = {
         idleImage: './assets/sprites/girl_model.png',
-        flinchImage: './assets/sprites/girl_flinch.png'
+        flinchImage: './assets/sprites/sailorgirlflinch_final.png'
     }
 
     let boy = {
