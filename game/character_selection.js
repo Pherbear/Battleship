@@ -1,9 +1,12 @@
 import {gameplay} from "./gameplay.js"
 
-let pvp
+let pvp_option
 
 export default function character_selection(pvp = false){
     
+    pvp_option = pvp
+
+    console.log(pvp)
 
     let selection_message
     if (pvp){
@@ -35,5 +38,5 @@ export default function character_selection(pvp = false){
 }
 
 function listener(e){
-    gameplay(null, e.target.id, pvp)
+    gameplay(null, e.target.id, pvp_option)
 }

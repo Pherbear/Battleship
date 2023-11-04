@@ -34,6 +34,8 @@ function gameplay(save_state = null, playerCharacter = null, pvp_option = false)
     
     pvp = pvp_option
 
+    console.log("pvp is " + pvp)
+
     data = {
         positions: positions,
         attackedCords: attackedCords,
@@ -94,7 +96,7 @@ function gameplay(save_state = null, playerCharacter = null, pvp_option = false)
     <div id="gameplay" class="gameplay">
         <div class="grid_container">
             <div class="player">
-                Player's grid:
+                Player ${pvp? "1": ""}'s grid:
                 <div class ="top-container">
                     <div class ="top-labels" id="top-labels">
                     </div>
@@ -107,7 +109,7 @@ function gameplay(save_state = null, playerCharacter = null, pvp_option = false)
                 </div>
             </div>
             <div class="enemy">
-                Enemy's grid:
+                ${pvp?"Player 2's grid:":"Enemy's grid:"}
                 <div class ="top-container">
                     <div class ="top-labels" id="top-labels">
                     </div>
@@ -128,7 +130,7 @@ function gameplay(save_state = null, playerCharacter = null, pvp_option = false)
             <div id="characters">
                 <div id="player_model" class="character">
                     <div class="player_turn turn">
-                        Player ${pvp? "1": ""}Turn
+                        Player ${pvp? "1": ""} Turn
                     </div>
                     <img src="${playerModel.idleImage}" class="player_image">
                 </div>
@@ -395,6 +397,10 @@ function generateShip(ship){
     
     let displayNone
     if(ship.affiliate == 'enemy') displayNone = `display: none;`
+
+    if (pvp) {
+        if (ship.affiliate == 'player') displayNone = `display: none;`
+    }
     
     let html = `
     <div class = "ship_container" id="ship${positions.indexOf(ship)}"
@@ -412,6 +418,14 @@ function generateShipHTML(ship){
     let affiliate = ship.affiliate
     let index = positions.indexOf(ship)
     let shipType = ``
+
+    if (pvp){
+        if (affiliate == 'player'){
+            affiliate = 'player 1'
+        } else if (affiliate == 'enemy'){
+            affiliate = 'player 2'
+        }
+    }
 
     switch(size){
         case 4:
@@ -446,6 +460,8 @@ function generateShipHTML(ship){
         status = 'Inactive'
         style = 'style="color: red;"'
     }
+
+    
     
     let capitalized = affiliate.charAt(0).toUpperCase() + affiliate.slice(1)
 
