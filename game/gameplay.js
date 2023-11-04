@@ -68,7 +68,7 @@ function gameplay(save_state = null, playerCharacter = null, pvp_option = false)
         playerCharacter = data.playerCharacter
         currentTurn = data.currentTurn
 
-        console.log(positions)
+        console.log(attackedCords)
     } else {
         console.log(`new game`)
         generatePositions()
@@ -434,8 +434,8 @@ function generateShipHTML(ship){
         case 3:
             shipType = 'Medium'
             break;
-            case 2:
-                shipType = 'Small'
+        case 2:
+            shipType = 'Small'
             break;
         default:
             shipType = 'Unknown'
@@ -465,7 +465,7 @@ function generateShipHTML(ship){
     
     let capitalized = affiliate.charAt(0).toUpperCase() + affiliate.slice(1)
 
-    let html = `<div id="${affiliate}_ship_${index}" class="ship_status">
+    let html = `<div id="${ship.affiliate}_ship_${index}" class="ship_status">
     ${capitalized} ${shipType} Vessel: <a ${style}>${status}</a>
     </div>`
     
@@ -489,6 +489,8 @@ function isShipSunk(ship){
     let id = `ship${index}`
     
     let boat_image = document.getElementById(id)
+
+    console.log(affiliate)
 
     let ship_html = document.getElementById(`${affiliate}_ship_${index}`).querySelector("a")
     ship_html.innerText = "Damaged"
