@@ -128,13 +128,13 @@ function gameplay(save_state = null, playerCharacter = null, pvp_option = false)
             <div id="characters">
                 <div id="player_model" class="character">
                     <div class="player_turn turn">
-                        Player Turn
+                        Player ${pvp? "1": ""}Turn
                     </div>
                     <img src="${playerModel.idleImage}" class="player_image">
                 </div>
                 <div id="enemy_model" class="character">
                     <div class="enemy_turn turn">
-                        Enemy Turn
+                        ${pvp? "Player 2 Turn" : "Enemy Turn"}
                     </div>
                     <img src="${enemyModel.idleImage}" class="enemy_image">
                 </div>
@@ -196,6 +196,16 @@ function gameplay(save_state = null, playerCharacter = null, pvp_option = false)
     for(const element of elements){
         element.addEventListener("click", clickedAttack)
     }
+
+    if (pvp) {
+        let playerelements = document.querySelectorAll(".player .gridItem")
+
+        for(const element of playerelements){
+            element.addEventListener("click", clickedAttack)
+        }
+    }
+
+
     document.querySelector('#force').addEventListener("click", forceGameOver)
     attackFromLoad(attackedCords)
     switchView(currentTurn)
@@ -213,16 +223,24 @@ function switchTurns(){
     else if (currentTurn == 'player') currentTurn = 'enemy'
 
     delay = true
+
+    if (pvp) {
+        setTimeout(function(){
+            delay = false
+            switchView(currentTurn)
+        }, timer*2)   
+    } else {
+        setTimeout(function(){
+            delay = false
+            switchView(currentTurn)
+            if(currentTurn == 'enemy'){
+                setTimeout(function(){
+                    randomAttack()
+                }, timer)
+            }
+        }, timer*2)    
+    }
     
-    setTimeout(function(){
-        delay = false
-        switchView(currentTurn)
-        if(currentTurn == 'enemy'){
-            setTimeout(function(){
-                randomAttack()
-            }, timer)
-        }
-    }, timer*2)    
 
 }
 
